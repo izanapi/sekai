@@ -1,15 +1,58 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>世界ガチャ</title><style>
-:root{--bg:#0c0d0c;--fg:#d8d9d2;--dim:#7d8077;--line:#30332e;--panel:#111310;--n:#c5c7c1;--r:#6ca8ff;--sr:#e5c95a;--ssr:#b07cff;--ur:#ff9a3d;--x:#ef5a5a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,"Noto Sans Mono CJK JP",monospace}main{max-width:800px;margin:auto;padding:18px 14px 70px}header{border-bottom:1px solid var(--line);padding-bottom:13px}.eyebrow{font-size:10px;color:var(--dim);letter-spacing:.13em}.title{font-size:26px;margin:7px 0 3px}.stats{display:flex;gap:13px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--dim)}b{color:var(--fg);font-weight:500}.panel{background:var(--panel);border:1px solid var(--line);padding:14px;margin:12px 0}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:15px 0 8px}.tab,.ghost,.action,.machine button,.skill,.claim{font:inherit;font-size:11px;border:1px solid var(--line);background:transparent;color:var(--fg);padding:8px 10px;cursor:pointer}.tab.on{background:var(--fg);color:var(--bg)}.view{display:none}.view.on{display:block}.machines{display:grid;gap:9px}.machine{border:1px solid var(--line);padding:13px;background:#10120f}.machine.lock{opacity:.46}.mhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.mname{font-size:14px}.mmeta{font-size:10px;color:var(--dim);text-align:right}.mdesc{font-size:11px;color:#a2a59d;line-height:1.65;margin:8px 0 12px}.machine button{width:100%;padding:10px}.machine button:disabled{cursor:default;opacity:.5}.result{display:none;min-height:190px}.result.on{display:block}.rarity{font-size:10px;letter-spacing:.13em}.itemname{font-size:25px;margin:7px 0}.type{font-size:10px;color:var(--dim)}.desc{font-size:13px;line-height:1.85;white-space:pre-line;margin:15px 0}.actions{display:flex;gap:7px;flex-wrap:wrap}.action.sell{margin-left:auto}.row{padding:10px 0;border-bottom:1px dotted #292c27;font-size:11px;line-height:1.65}.dim{color:var(--dim)}.invtitle{font-size:13px}.money{color:#d8c071}.quest{border-left:2px solid #555a50;padding-left:11px}.quest.done{border-left-color:#9aa891}.progress{font-size:10px;color:var(--dim);margin-top:5px}.bar{height:4px;background:#22251f;margin:7px 0}.bar i{height:100%;background:#bfc2b7;display:block}.skillgrid{display:grid;gap:7px}.skill{text-align:left;width:100%}.skill:disabled{opacity:.35}.skill strong{display:block;font-size:12px;margin-bottom:3px}.skill span{font-size:10px;color:var(--dim)}.income{display:flex;justify-content:space-between;gap:12px}.notice{font-size:11px;color:#afb2aa;line-height:1.7}.rare-N{color:var(--n)}.rare-R{color:var(--r)}.rare-SR{color:var(--sr)}.rare-SSR{color:var(--ssr)}.rare-UR{color:var(--ur)}.rare-X{color:var(--x)}footer{position:fixed;left:8px;bottom:6px;font-size:9px;color:#464942;background:var(--bg);padding:2px 4px}@media(max-width:520px){.itemname{font-size:22px}.action.sell{margin-left:0}.stats{gap:8px 13px}}</style></head><body><main>
-<header><div class="eyebrow">UNIVERSAL ACQUISITION TERMINAL // BUILD 0.3</div><div class="title">世界ガチャ</div><div class="eyebrow">SEKAI GACHA</div><div class="stats"><span>所持金 <b id="money">650</b>円</span><span>発見 <b id="found">0</b></span><span>LV <b id="lv">1</b></span><span>観測収入 <b id="rate">0</b>円/分</span><span>整合率 <b id="integrity">100.000</b>%</span></div></header>
-<div class="tabs"><button class="tab on" data-view="gacha">ガチャ</button><button class="tab" data-view="inventory">収集品</button><button class="tab" data-view="quests">依頼</button><button class="tab" data-view="skills">技能</button><button class="tab" data-view="log">記録</button></div>
-<section id="gacha" class="view on"><div class="panel notice">端末は対象を価値ではなく存在階層で分類しています。上位端末ほど、物品ではないものを排出します。</div><div id="machines" class="machines"></div><div id="result" class="panel result"><div id="rarity" class="rarity"></div><div id="itemname" class="itemname"></div><div id="type" class="type"></div><div id="desc" class="desc"></div><div class="actions"><button id="keep" class="action">保管</button><button id="use" class="action">使用</button><button id="return" class="action">返却</button><button id="sell" class="action sell">売却 <span id="sellprice"></span>円</button></div></div></section>
-<section id="inventory" class="view"><div class="panel"><div class="income"><span>保管庫</span><span class="money" id="incomeText"></span></div><div id="inv"></div></div></section>
-<section id="quests" class="view"><div class="panel"><div class="notice">調査局は収集品そのものではなく、カタログ情報を買い取ります。納品しても所有物は失われません。</div><div id="questList"></div></div></section>
-<section id="skills" class="view"><div id="skillList"></div></section>
-<section id="log" class="view"><div class="panel" id="logs"></div></section>
-<footer>世界ガチャ // NOTHING IS OUTSIDE THE POOL</footer>
-<script>
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d0c"><meta name="description" content="日用品から世界の規則まで。24台の端末で収集と調査を続けるブラウザゲーム。">
+<title>世界ガチャ — 調査局</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0d0c;--fg:#d8d9d2;--dim:#969b90;--line:#353a31;--panel:#121510;--n:#c5c7c1;--r:#8ab9ff;--sr:#e5c95a;--ssr:#bd95ff;--ur:#ffad62;--x:#ff8282;--accent:#d2ddb1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,"Noto Sans Mono CJK JP",monospace;font-size:16px;line-height:1.75}
+button,input,select{font:inherit}button{min-height:44px;padding:9px 15px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;touch-action:manipulation}
+button:hover:not(:disabled){border-color:var(--accent);background:#1e241a}button:disabled{opacity:.48;cursor:default}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button.primary,button.on{background:var(--accent);color:#10140b;border-color:var(--accent)}button.primary:hover:not(:disabled),button.on:hover{background:#e4eccf;color:#10140b}
+main{max-width:1120px;margin:auto;padding:24px 24px 60px}header{border-top:3px solid var(--accent);padding:17px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;gap:20px;align-items:center}h1{font-size:32px;line-height:1.2;margin:6px 0 10px;letter-spacing:.06em}h2{font-size:22px;line-height:1.5;margin:6px 0}h3{font-size:17px;margin:0}p{margin:12px 0}
+.mini{font-size:12px;letter-spacing:.06em;color:var(--dim)}.meta,small{font-size:13px;color:var(--dim)}.dim{color:var(--dim)}
+.stats{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px}.stats b{font-size:16px;color:var(--fg);font-weight:500}.stats .cash{color:var(--accent);font-size:22px}
+#status{font-size:13px;color:var(--dim);margin:12px 0 0}.stamp{text-align:right;color:var(--accent);font-size:13px;border:1px solid var(--line);padding:8px 12px;white-space:nowrap}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:18px 0 24px;overflow-x:auto}.tabs button{flex:1;min-width:76px;white-space:nowrap;border:0;border-bottom:2px solid transparent;font-size:14px;padding:10px}.tabs button.on{background:transparent;color:var(--accent);border-bottom-color:var(--accent)}
+[hidden]{display:none!important}.layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.sectionLabel{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;font-size:14px}
+#districts{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:14px}#districts button{padding:8px 4px;font-size:14px}#districts small{font-size:12px;color:inherit}
+#machineGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.machineCard{text-align:left;display:flex;flex-direction:column;padding:14px;gap:5px;background:#10130f;min-width:0}
+.machineCard strong{font-size:20px;font-weight:500;color:var(--fg)}.machineCard.selected{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent);background:#1b2017}.machineCard.locked .mini{color:#b4a488}.machineCard>span{font-size:14px}.machineCard>span.mini{font-size:12px}
+.meter{display:block;height:3px;background:#2e3328;width:100%;margin:8px 0 4px}.meter>i{display:block;background:var(--accent);height:100%}
+.panel,#selectedMachine,#result{border:1px solid var(--line);padding:20px;background:var(--panel);margin-bottom:16px}
+#result{border-color:#65744e;position:relative}#result:before{content:"排出物 / 処理待ち";display:block;border-bottom:1px dotted var(--line);font-size:12px;color:var(--dim);padding-bottom:8px;margin-bottom:15px}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.cost{font-size:26px;color:var(--accent);white-space:nowrap}
+#selectedMachine>.primary{width:100%;margin:8px 0 12px}.itemname{font-size:32px;letter-spacing:.08em}.desc{white-space:pre-line;line-height:1.9}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{flex:1;white-space:nowrap;font-size:14px;padding:10px}
+summary{cursor:pointer;min-height:44px;align-content:center;font-size:14px}.pool{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.pool>span{border:1px solid var(--line);padding:2px 8px;font-size:13px}.present{color:var(--accent);border-color:#5d7046!important}
+.surveyBox{margin-top:18px;padding:16px 0;border-top:1px dotted var(--line)}#survey{width:100%;font-size:14px}.surveyBox p{margin:8px 0 0}
+.intro{color:var(--dim);font-size:14px;margin-bottom:22px}.row{border-bottom:1px dotted var(--line);padding:18px 0;overflow-wrap:anywhere}.row:first-child{padding-top:4px}
+.row summary{display:flex;justify-content:space-between;gap:15px}.testrecord{border-left:2px solid var(--accent);padding-left:14px;font-size:14px;color:#b8c5a4}
+.empty{color:var(--dim);padding:25px 0}.filters{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.filters label{flex:1;font-size:14px;min-width:160px}.filters input,.filters select{display:block;width:100%;min-height:44px;background:#141711;border:1px solid var(--line);padding:8px 10px;color:var(--fg)}
+#questList,#reportsList,#skillList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#questList{grid-template-columns:repeat(3,minmax(0,1fr))}#questList .panel,#reportsList .panel,#skillList .panel{margin:0}
+#questList button,#reportsList button,#skillList button{margin-top:12px;width:100%;font-size:14px}.complete{border-color:#52613e}.complete h3{color:var(--accent)}.complete p{font-size:14px}
+.sectionTitle{margin:30px 0 8px;font-size:20px}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:12px;font-size:12px;color:var(--dim)}
+.rare-N{color:var(--n)}.rare-R{color:var(--r)}.rare-SR{color:var(--sr)}.rare-SSR{color:var(--ssr)}.rare-UR{color:var(--ur)}.rare-X{color:var(--x)}
+#storageNotice{color:#ffc18b;border:1px solid #876544;padding:12px}.fileLabel{font-size:14px;display:block;margin-top:18px}.fileLabel input{display:block;max-width:100%;margin-top:7px;font-size:14px}#importStatus{color:#ffc18b}
+@media(max-width:700px){main{padding:14px 14px 40px}.layout{grid-template-columns:1fr;gap:18px}.stamp{font-size:12px;padding:6px}h1{font-size:28px}.stats{gap:5px 15px}.tabs{margin:14px 0 20px}.tabs button{min-width:66px;padding:9px 6px}#machineGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.machineCard{padding:10px;gap:3px}.machineCard strong{font-size:17px}.machineCard .mini{font-size:12px}.machineCard>span{font-size:13px}.machineCard .dim{display:block}#questList,#reportsList,#skillList{grid-template-columns:1fr}.panel,#selectedMachine,#result{padding:16px}.sectionLabel{margin-top:0}.surveyBox{margin-top:12px;padding-top:12px}.brand{gap:10px}}
+@media(max-width:370px){#machineGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.stamp{display:none}.stats{gap:5px 12px}.actions button{flex:1 1 40%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body><main>
+<header><div class="brand"><div><div class="mini">UNIVERSAL ACQUISITION TERMINAL</div><h1>世界ガチャ</h1></div><div class="stamp">調査局 / 第四収集課<br>CATALOGUE BUILD 0.4</div></div>
+<div class="stats"><span>所持金 <b id="money" class="cash">650</b> 円</span><span>発見 <b id="found">0</b></span><span>LV <b id="lv">1</b></span><span>研究 <b id="research">0</b> 点</span><span>観測 <b id="rate">2</b> 円/分</span><span>整合率 <b id="integrity">100</b>%</span></div><p id="status"></p></header>
+<p id="storageNotice" hidden role="status"></p>
+<nav class="tabs" aria-label="端末メニュー"><button class="on" data-view="gacha" aria-current="page">ガチャ</button><button data-view="inventory">保管庫</button><button data-view="catalogue">図鑑</button><button data-view="quests">調査</button><button data-view="skills">技能</button><button data-view="log">記録</button></nav>
+<section id="gacha" class="view"><div class="layout"><div><div class="sectionLabel"><span>端末を選択</span><span class="mini">04 区画 / 24 台</span></div><div id="districts"></div><div id="machineGrid"></div><div class="surveyBox"><button id="survey" data-action="survey">周辺調査 ＋60円</button><p class="meta">30秒ごとに実施可能。所持品を消費しません。</p></div></div>
+<div><div id="result" hidden aria-live="polite"></div><div id="selectedMachine"></div><p class="meta">初回登録には手当を支給します。保管した品は観測収入を発生させます。発見記録は手放しても残ります。</p></div></div></section>
+<section id="inventory" class="view" hidden><h2>保管庫</h2><p class="intro">保管数に応じて観測手当を支給。端末維持費2円/分を含みます。不在時も最大8時間分を精算します。</p><div id="inventoryList"></div></section>
+<section id="catalogue" class="view" hidden><div class="mhead"><h2>発見図鑑</h2><span id="catalogueCount" class="meta"></span></div><p class="intro">所有状況にかかわらず、登録した対象の記録を閲覧できます。</p><div class="filters"><label>照会語<input id="search" type="search" placeholder="名称・分類" autocomplete="off"></label><label>状態<select id="catalogueFilter"><option value="all">すべて</option><option value="seen">発見済み</option><option value="unseen">未発見</option><option value="used">使用試験済み</option></select></label></div><div id="catalogueList"></div></section>
+<section id="quests" class="view" hidden><h2>調査依頼</h2><p class="intro">登録数・初回使用数・稼働回数を報告してください。報告の受理後、次の目標を提示します。</p><div id="questList"></div><h2 class="sectionTitle">組合せ調査</h2><p class="intro">指定品を同時に保管すると報告できます。提出しても品は失われません。報告1件につき保管品の観測収入が恒久的に5%増加。各報告の研究手当は4点です。</p><div id="reportsList"></div></section>
+<section id="skills" class="view" hidden><h2>技能認可</h2><p class="intro">初回使用・返却・調査報告で研究点を取得できます。認可された技能は常時有効です。</p><div id="skillList"></div><div class="panel" style="margin-top:20px"><h3>整合性の補正</h3><p>研究3点で整合率を最大10ポイント回復。整合率は端末の報告文に影響します。抽選の資格は失われません。</p><button id="repair" data-action="repair">再計算を依頼 · 研究3点</button></div></section>
+<section id="log" class="view" hidden><h2>運用記録</h2><div class="panel"><p>このブラウザに自動保存します。端末を移す場合は記録を書き出してください。</p><button id="export">記録を書き出す</button><label class="fileLabel">保存した記録を読み込む<input type="file" id="import" accept=".json,application/json"></label><p id="importStatus" role="status"></p><p class="meta">直近100件の運用履歴を保存します。保管庫・図鑑・技能・未処理の排出物も記録に含まれます。</p></div><div id="logs"></div></section>
+<footer>世界ガチャ // NOTHING IS OUTSIDE THE POOL<br>対象は価値ではなく、存在階層によって分類されます。</footer>
+</main><script>
+
 const rareClass=r=>'rare-'+(r==='???'?'X':r);const values={N:18,R:45,SR:110,SSR:260,UR:650,'???':1800};const obs={N:.2,R:.6,SR:1.5,SSR:4,UR:10,'???':25};
 const I=(n,r,c,t,d,u,x=0)=>({n,r,c,t,d,u,x});
 const items=[
@@ -49,39 +92,299 @@ I('月','UR','天体','衛星','地球の自然衛星。平均直径約3,474km�
 I('時間','UR','法則','時間','事象の順序と持続を扱う基礎的な構造。\n端末内部時計を含む多数の機能が依存している。','停止要求を送信した。端末時計だけが0.3秒遅れた。',14),
 I('世界','???','全体','総体','現在アクセス可能な存在、事象、規則、情報の総体。\n取得処理完了後に外部が残るかどうかは定義されていない。','取得を開始した。0.7%で安全装置が作動した。',28)
 ];
-const machines=[
-{name:'拾得物ガチャ',cost:100,unlock:0,desc:'日用品、食品、雑貨。世界の表面に落ちているもの。',cats:['物品','食品'],weights:{N:66,R:27,SR:7,SSR:0,UR:0,'???':0}},
-{name:'現地調査ガチャ',cost:350,unlock:1200,desc:'場所、生物、現象を含む。調査局の通常装備。',cats:['物品','場所','生物','現象'],weights:{N:25,R:40,SR:27,SSR:8,UR:0,'???':0}},
-{name:'記録保管庫ガチャ',cost:900,unlock:3500,desc:'記憶、時間、状態、概念。物質でない項目が混入する。',cats:['情報','時間','状態','概念','現象'],weights:{N:0,R:9,SR:41,SSR:42,UR:8,'???':0}},
-{name:'基底構造ガチャ',cost:2500,unlock:9000,desc:'法則、天体、総体。端末は利用を推奨していない。',cats:['法則','概念','天体','時間','全体'],weights:{N:0,R:0,SR:8,SSR:37,UR:52,'???':3}}
+
+items.push(...[{"n":"砂","r":"N","c":"物品","t":"鉱物","d":"石英を主成分とする粒状物。総質量240g。採取地点は内陸として登録されている。貝殻片を含む。","u":"ふるいにかけた。貝殻片だけが網を通過しなかった。","x":0},{"n":"瓶","r":"N","c":"物品","t":"容器","d":"容量200mlのガラス瓶。内容物なし。蓋は内側から締められている。","u":"蓋の開放を申請した。内側から一度ノックがあった。","x":0},{"n":"切符","r":"R","c":"物品","t":"交通","d":"普通乗車券。入鋏済み。到着駅の欄に出発駅と同じ名称が印字されている。","u":"改札機に挿入した。出発地点への到着が確認された。","x":0},{"n":"靴下","r":"N","c":"物品","t":"衣類","d":"右足用。洗濯済み。対になる個体は六回の捜索で発見されなかった。","u":"片足に装着した。捜索対象が左足用に更新された。","x":0},{"n":"消しゴム","r":"N","c":"物品","t":"文具","d":"合成樹脂製。角はすべて摩耗している。紙の繊維と人名の一部が付着している。","u":"筆記を消した。名前を呼ばれた気がしたが、音声記録はない。","x":0},{"n":"時計","r":"R","c":"物品","t":"計器","d":"卓上時計。電源を取り外しても秒針が動く。精度は通常品より悪い。","u":"時刻を合わせた。時計は元の誤差へ復帰した。","x":0},{"n":"豆腐","r":"N","c":"食品","t":"加工食品","d":"木綿豆腐。300g。容器の賞味期限は本日。昨日の検査でも本日だった。","u":"水を切った。質量は変化しなかった。","x":0},{"n":"塩","r":"N","c":"食品","t":"調味料","d":"塩化ナトリウムを主成分とする結晶。海水由来。海の識別番号が存在しない。","u":"少量を溶解した。遠方の波音を検出した。","x":0},{"n":"卵","r":"R","c":"食品","t":"生体由来","d":"殻に亀裂なし。内部から毎日一回、正午を知らせる打音がある。","u":"透光検査を実施した。内部にも検査員がいた。","x":0},{"n":"パン","r":"N","c":"食品","t":"穀物","d":"食パン一枚。焼成済み。製造工場は現在、駐車場として利用されている。","u":"加熱した。駐車券が一枚排出された。","x":0},{"n":"包丁","r":"R","c":"物品","t":"道具","d":"刃渡り165mm。研磨痕あり。影の長さは刃渡りと一致しない。","u":"紙を切った。紙の影が切断前の形状を維持した。","x":0},{"n":"発酵","r":"SR","c":"現象","t":"生化学","d":"微生物による物質変換。対象物の指定が省略されている。","u":"適用した。保管庫の空気がわずかに膨張した。","x":0.3},{"n":"封筒","r":"N","c":"物品","t":"郵便","d":"未開封。宛名は空白。配達不能の印が七つある。すべて同じ筆跡。","u":"開封した。内側にも宛名欄があった。","x":0},{"n":"写真","r":"R","c":"情報","t":"画像","d":"海辺の集合写真。被写体は12人。影は13人分確認される。","u":"人数を再計数した。影が一つ退席した。","x":0.1},{"n":"住所","r":"SR","c":"情報","t":"所在地","d":"住居表示として有効。対応する区画には現在、住所の看板だけがある。","u":"訪問を記録した。誰もいない家から受領印が返った。","x":0.2},{"n":"留守電","r":"R","c":"情報","t":"音声","d":"録音時間18秒。無言。背景に録音装置の操作音が含まれる。","u":"再生した。再生ボタンを押す音が先に聞こえた。","x":0},{"n":"忘れ物","r":"SR","c":"概念","t":"所有","d":"所有者が一時的に失念した対象の総称。何を忘れたかという情報は含まれない。","u":"照会した。照会目的を再入力するよう求められた。","x":0.4},{"n":"鏡","r":"R","c":"物品","t":"光学","d":"銀引きの平面鏡。反射像の更新に0.4秒の遅延がある。","u":"背を向けた。像はしばらく正面を向いていた。","x":0.1},{"n":"切手","r":"N","c":"物品","t":"郵便","d":"未使用。額面80円。図案の鳥は観察中に一度だけ向きを変えた。","u":"封筒に貼付した。重量が17g増加した。","x":0},{"n":"電話","r":"R","c":"物品","t":"通信","d":"黒色の固定電話。回線契約なし。毎月、通話料だけが請求される。","u":"受話器を上げた。こちらが出るのを待つよう案内された。","x":0},{"n":"苔","r":"N","c":"生物","t":"植物","d":"含水率78%。コンクリート片に定着している。日光のない棚でも生育する。","u":"霧吹きで加湿した。端末の排気口へ向きを変えた。","x":0},{"n":"種","r":"R","c":"生物","t":"植物","d":"硬い種皮を持つ。発芽条件の欄に「不在」と記載されている。","u":"目を離した。根が2mm伸びていた。","x":0},{"n":"菌糸","r":"R","c":"生物","t":"菌類","d":"白色の糸状構造。複数の標本容器を接続している。容器同士は離れている。","u":"一部を切断した。隣の容器から切断音がした。","x":0.1},{"n":"森","r":"SR","c":"場所","t":"植生","d":"針葉樹を主体とする森林。外周の測定値より内部の経路が長い。","u":"目印を付けた。同じ印が前方にも見つかった。","x":0.3},{"n":"足音","r":"SR","c":"現象","t":"音響","d":"二足歩行に相当する周期音。荷重を検出できない。歩幅は観測者と一致する。","u":"停止を指示した。あなたが止まるまで継続した。","x":0.2},{"n":"犬","r":"R","c":"生物","t":"動物","d":"成犬。首輪なし。端末の故障箇所を正確に見つめている。","u":"点検への協力を求めた。散歩が先だと判断された。","x":0},{"n":"羽","r":"N","c":"物品","t":"生体由来","d":"鳥類の風切羽。全長14cm。落下方向が室内の気流と一致しない。","u":"手を離した。天井へ落下した。","x":0},{"n":"クラゲ","r":"R","c":"生物","t":"海洋","d":"傘径6cm。容器内に水はないが、遊泳を継続している。","u":"給水した。水だけが容器から排出された。","x":0.1},{"n":"貝殻","r":"N","c":"物品","t":"生体由来","d":"二枚貝の片殻。内部から波音。消音材を詰めても変化なし。","u":"耳を近づけた。向こうからも呼吸音がした。","x":0},{"n":"錨","r":"R","c":"物品","t":"航海","d":"鋼製。質量8kg。どの床に置いても海抜が低下する。","u":"持ち上げた。床が元の高さに戻った。","x":0.2},{"n":"海溝","r":"SSR","c":"場所","t":"地形","d":"深度の最終桁が継続的に増加している。調査艇は待機中。","u":"測深した。測定器のケーブルが不足した。","x":1.2},{"n":"潮汐","r":"SR","c":"現象","t":"海洋","d":"海面の周期的変動。付属の月は欠品している。","u":"運転した。水の入ったコップだけが反応した。","x":0.4},{"n":"霧","r":"R","c":"現象","t":"気象","d":"微細な水滴の浮遊。視程12m。内部にある物品の数は照会できない。","u":"送風した。別の方向から同量が戻った。","x":0.1},{"n":"雪","r":"R","c":"現象","t":"気象","d":"氷晶の降下。融解水の温度は室温。冷たさだけが残る。","u":"掌で受けた。濡れなかったが、手袋が必要になった。","x":0},{"n":"雷","r":"SR","c":"現象","t":"電気","d":"放電現象。発光から音までの時間差は負。","u":"観測を開始した。開始前に耳を塞ぐべきだった。","x":0.3},{"n":"風","r":"R","c":"現象","t":"気象","d":"空気の移動。方位計は風上として地下を指す。","u":"流向を追跡した。床下に空はなかった。","x":0},{"n":"気圧","r":"SSR","c":"法則","t":"気象","d":"単位面積に作用する大気の圧力。請求先はすべての地表面。","u":"局所値を変更した。未開封の袋が一斉に膨らんだ。","x":1.5},{"n":"廊下","r":"R","c":"場所","t":"建築","d":"幅1.8m。両端の扉は同じ部屋へ接続している。中間に窓はない。","u":"通過した。入室記録が二件追加された。","x":0.1},{"n":"階段","r":"SR","c":"場所","t":"建築","d":"踊り場を含む階段。上りと下りで段数が一段異なる。","u":"数え直した。疲労だけが一致した。","x":0.2},{"n":"扉","r":"R","c":"物品","t":"建具","d":"片開き。開いた状態でも向こう側は観測できない。","u":"ノックした。直後にこちら側から返答があった。","x":0},{"n":"地下室","r":"SR","c":"場所","t":"建築","d":"地下一階相当。地上部分の建物は登録されていない。","u":"照明を点けた。上階で椅子を引く音がした。","x":0.3},{"n":"出口","r":"SSR","c":"概念","t":"境界","d":"内部から外部へ移動するための接続。内部の定義は添付されていない。","u":"通過を申請した。現在地が内部に変更された。","x":1},{"n":"橋","r":"SR","c":"場所","t":"交通","d":"両岸を接続する構造物。片岸は建設計画にのみ存在する。","u":"中ほどまで進んだ。残りは計画通りだった。","x":0.3},{"n":"地図","r":"R","c":"情報","t":"地理","d":"縮尺1:25000。現在地の印だけが印刷面から離れている。","u":"折り畳んだ。現在地が折り目を避けた。","x":0},{"n":"国境","r":"SSR","c":"概念","t":"行政","d":"二つの管轄を分ける線。線上の小石に二重の課税通知がある。","u":"越境した。石だけが入国を拒否された。","x":0.7},{"n":"夜","r":"SR","c":"時間","t":"日周期","d":"直射日光が到達しない時間帯。街灯の保守費用は含まれない。","u":"適用した。窓の外で閉店作業が始まった。","x":0.3},{"n":"朝","r":"SR","c":"時間","t":"日周期","d":"一日の初期区分。付属する予定はすべて未処理。","u":"開始した。前日の疲労は引き継がれた。","x":0.2},{"n":"正午","r":"SSR","c":"時間","t":"時刻","d":"一日の中央付近を示す時刻。影の提出を求められる。","u":"適用した。時計は昼休みに入った。","x":0.6},{"n":"閏秒","r":"SSR","c":"時間","t":"補正","d":"時刻調整用の一秒。未使用だが経年劣化の記録がある。","u":"挿入した。何もできない時間が一秒増えた。","x":0.8},{"n":"明日","r":"UR","c":"時間","t":"未来","d":"翌日に相当する時間。内容は未確定。納期は常に翌日。","u":"開封を要求した。本日中の処理はできない。","x":3},{"n":"寝言","r":"R","c":"情報","t":"音声","d":"睡眠中の発話。話者は不明。議事録の形式を取っている。","u":"文字に起こした。欠席者として名前が記載された。","x":0},{"n":"既視感","r":"SR","c":"状態","t":"精神","d":"未経験の事象を経験済みと判断する状態。検査履歴にも同じ記述がある。","u":"検査した。この検査は以前にも実施した。","x":0.2},{"n":"悪夢","r":"SSR","c":"現象","t":"精神","d":"不快な睡眠時体験。終了手順は覚醒。ただし覚醒の確認方法は未記載。","u":"中止した。中止した夢を見た可能性が残る。","x":1},{"n":"眠気","r":"R","c":"状態","t":"生理","d":"覚醒水準の低下。担当者不在につき検査は延期されている。","u":"適用した。以降の報告は翌営業日となる。","x":0},{"n":"名前","r":"SR","c":"情報","t":"識別","d":"対象を呼び分けるための文字列。現在は対象から外れている。","u":"読み上げた。室内の三つの物品が応答した。","x":0.4},{"n":"噂","r":"R","c":"情報","t":"伝聞","d":"出典を特定できない情報。複製するたびに精度が上がると主張している。","u":"照合した。照合したという噂が追加された。","x":0},{"n":"誤字","r":"R","c":"情報","t":"文字","d":"正規表記から逸脱した文字。訂正申請の原本にも同じ文字がある。","u":"訂正した。誤字の側が正規表記になった。","x":0.1},{"n":"空白","r":"SSR","c":"情報","t":"欠落","d":"記載がない領域。何もないことを示す記載とは区別される。","u":"記入した。記入した部分だけが空白になった。","x":0.8},{"n":"辞書","r":"SR","c":"物品","t":"書籍","d":"語彙の説明を収録する書籍。「辞書」の項目だけが製本前の状態にある。","u":"参照した。読者という語に現在の写真があった。","x":0.3},{"n":"拍手","r":"R","c":"現象","t":"音響","d":"手掌を打ち合わせる音。音源は一人。録音では人数が増えている。","u":"再生した。最後の一人がなかなか止めなかった。","x":0},{"n":"残響","r":"SR","c":"現象","t":"音響","d":"音源停止後に残る音。元の音源は解体済み。","u":"吸音処理を行った。解体前の部屋の寸法が得られた。","x":0.2},{"n":"音叉","r":"R","c":"物品","t":"楽器","d":"基準周波数440Hz。打撃しなくても正しい音程で苦情を述べる。","u":"打撃した。苦情が止まり、基準音が出た。","x":0},{"n":"青","r":"SR","c":"概念","t":"色","d":"可視色の一種。晴天時に大量の照会を受ける。","u":"適用した。室内が空として誤認された。","x":0.3},{"n":"影","r":"SR","c":"現象","t":"光学","d":"遮光により形成される暗部。遮光物の提出は免除されている。","u":"光を当てた。隣へ移動した。","x":0.2},{"n":"透明","r":"SSR","c":"状態","t":"光学","d":"可視光を透過する性質。所在確認の担当部署が受領を拒否している。","u":"適用した。処理済みの印だけが見える。","x":0.7},{"n":"温度","r":"SSR","c":"法則","t":"物理","d":"熱的状態を表す量。比較対象がない場合にも数値が存在する。","u":"一度下げた。誰かが上着を取りに戻った。","x":1.2},{"n":"慣性","r":"UR","c":"法則","t":"物理","d":"運動状態の変化に対する抵抗。手続き上も同様の挙動を示す。","u":"変更した。処理は従来の方向へ継続した。","x":6},{"n":"確率","r":"UR","c":"法則","t":"数学","d":"事象の起こりやすさを表す尺度。本端末は当事者に該当する。","u":"照会した。回答が得られる確率だけが返された。","x":7},{"n":"真空","r":"SSR","c":"状態","t":"物理","d":"物質密度の低い空間。空欄とは異なり、設備を必要とする。","u":"開放した。空気が業務を引き継いだ。","x":1.5},{"n":"光","r":"UR","c":"現象","t":"物理","d":"電磁放射。配達時間は距離に依存する。最短配送の指定は受理されない。","u":"送信した。到達確認より先に内容が届いた。","x":5},{"n":"軌道","r":"SSR","c":"法則","t":"天体","d":"運動体が通過する経路。対象の運動体は別売。","u":"投入した。空の容器が周期的に戻るようになった。","x":1.2},{"n":"彗星","r":"UR","c":"天体","t":"小天体","d":"揮発性成分を含む天体。前回の来訪時には担当者が生まれていなかった。","u":"次回来訪を予約した。担当者の後任が必要となる。","x":4},{"n":"星","r":"UR","c":"天体","t":"恒星","d":"自ら放射を行う天体。光熱費の計上方法は未承認。","u":"点灯を要求した。すでに点灯中と回答された。","x":5},{"n":"無限","r":"UR","c":"概念","t":"数学","d":"有限の上限を持たないこと。保管容量の欄には入力できない。","u":"計数を開始した。完了予定日は表示されない。","x":8},{"n":"零","r":"SSR","c":"概念","t":"数学","d":"数量がないことを表す数。一件として登録されている。","u":"加算した。処理件数のみ増加した。","x":0.8},{"n":"観測者","r":"UR","c":"概念","t":"認識","d":"状態を確認する主体。現在の画面には一名いると推定される。","u":"照会した。端末の反対側から照会された。","x":9},{"n":"外側","r":"UR","c":"概念","t":"境界","d":"ある領域に属さない側。領域の追加指定で所在が変わる。","u":"移動した。移動先も内側として登録された。","x":8},{"n":"可能性","r":"UR","c":"概念","t":"未確定","d":"実現していない選択肢。実現時にはこの項目から除外される。","u":"選択した。残りの選択肢が閉じられた。","x":5},{"n":"終点","r":"SSR","c":"場所","t":"交通","d":"移動経路の末端。到着後の予定は管理対象外。","u":"到着を記録した。帰路の案内はない。","x":1},{"n":"許可","r":"SR","c":"情報","t":"行政","d":"行為を認める記録。許可対象の欄は後から記入する方式。","u":"行使した。許可を使う許可が必要だった。","x":0.2},{"n":"負債","r":"SSR","c":"概念","t":"会計","d":"将来の支払義務。債権者は解散しているが、督促は自動化されている。","u":"照会した。照会手数料が追加された。","x":0.5},{"n":"領収書","r":"R","c":"物品","t":"会計","d":"受領額0円。収入印紙が貼付されている。経理部は原本の保管を要求している。","u":"提出した。何も受け取らなかった証明が発行された。","x":0},{"n":"判子","r":"R","c":"物品","t":"行政","d":"朱肉式。印面は「済」。何が済んだかについては記録しない。","u":"押印した。審査前に処理が完了した。","x":0}]
+);
+const machines=[{"id": "m0", "name": "拾得物ガチャ", "group": "生活", "cost": 100, "unlock": 0, "desc": "日用品、食品、雑貨。世界の表面に落ちているもの。", "pool": ["石", "釘", "輪ゴム", "電池", "傘", "ネギ", "レシート", "鍵", "軍手", "椅子", "硬貨", "骨", "砂"]}, {"id": "m1", "name": "台所ガチャ", "group": "生活", "cost": 80, "unlock": 0, "desc": "食品と調理器具。鮮度より先に所在を確認してください。", "pool": ["ネギ", "豆腐", "塩", "卵", "パン", "包丁", "発酵"]}, {"id": "m2", "name": "遺失物ガチャ", "group": "生活", "cost": 90, "unlock": 0, "desc": "持ち主の不在が確認された品。所有権の保証なし。", "pool": ["鍵", "傘", "靴下", "切符", "軍手", "忘れ物"]}, {"id": "m3", "name": "机上ガチャ", "group": "生活", "cost": 70, "unlock": 0, "desc": "引き出し一段分の調査。大きな異常は想定していません。", "pool": ["釘", "輪ゴム", "消しゴム", "電池", "時計", "封筒", "誤字"]}, {"id": "m4", "name": "郵便ガチャ", "group": "生活", "cost": 110, "unlock": 0, "desc": "配達区域に存在しない宛先を含みます。", "pool": ["封筒", "切手", "写真", "住所", "留守電", "レシート"]}, {"id": "m5", "name": "路地ガチャ", "group": "生活", "cost": 120, "unlock": 0, "desc": "建物の隙間を調査します。立ち入りの記録は残ります。", "pool": ["猫", "蛾", "瓶", "電柱", "苔", "足音"]}, {"id": "m6", "name": "現地調査ガチャ", "group": "現地", "cost": 220, "unlock": 8, "desc": "場所、生物、現象を含む。調査局の通常装備。", "pool": ["石", "骨", "犬", "猫", "昆虫", "井戸", "駅", "島", "雨", "森"]}, {"id": "m7", "name": "林床ガチャ", "group": "現地", "cost": 180, "unlock": 8, "desc": "地表付近の生物。見下ろす側も調査対象です。", "pool": ["苔", "種", "菌糸", "羽", "蛾", "昆虫", "森"]}, {"id": "m8", "name": "深海ガチャ", "group": "現地", "cost": 300, "unlock": 12, "desc": "光の届かない区画。帰還費用は料金に含まれます。", "pool": ["貝殻", "クラゲ", "錨", "島", "潮汐", "海溝"]}, {"id": "m9", "name": "気象ガチャ", "group": "現地", "cost": 260, "unlock": 10, "desc": "気象現象を個別に払い出します。屋内でも有効です。", "pool": ["雨", "霧", "雪", "雷", "風", "気圧"]}, {"id": "m10", "name": "建築ガチャ", "group": "現地", "cost": 280, "unlock": 12, "desc": "建具から建物内部まで。外観は付属しません。", "pool": ["椅子", "扉", "廊下", "階段", "地下室", "出口"]}, {"id": "m11", "name": "交通ガチャ", "group": "現地", "cost": 240, "unlock": 10, "desc": "移動のための設備。到着は保証されません。", "pool": ["切符", "地図", "駅", "橋", "電柱", "終点"]}, {"id": "m12", "name": "記録保管庫ガチャ", "group": "記録", "cost": 650, "unlock": 22, "desc": "記憶、時間、状態、概念。物質でない項目が混入する。", "pool": ["写真", "留守電", "記憶", "名前", "昨日", "沈黙", "赤", "夢", "死"]}, {"id": "m13", "name": "夢ガチャ", "group": "記録", "cost": 420, "unlock": 18, "desc": "睡眠中の取得物。覚醒後も一部が残ります。", "pool": ["寝言", "眠気", "記憶", "既視感", "夢", "悪夢"]}, {"id": "m14", "name": "暦ガチャ", "group": "記録", "cost": 550, "unlock": 20, "desc": "時間の区分を取り扱います。予定の移動は各自で行ってください。", "pool": ["朝", "夜", "火曜日", "昨日", "正午", "閏秒", "明日"]}, {"id": "m15", "name": "言語ガチャ", "group": "記録", "cost": 380, "unlock": 16, "desc": "文字と、その文字が指すもの。両者は別々に排出されます。", "pool": ["噂", "誤字", "名前", "辞書", "空白"]}, {"id": "m16", "name": "音響ガチャ", "group": "記録", "cost": 400, "unlock": 18, "desc": "音源の有無を問わず受け付けています。", "pool": ["電話", "音叉", "拍手", "足音", "残響", "ジャズ", "沈黙"]}, {"id": "m17", "name": "色彩ガチャ", "group": "記録", "cost": 440, "unlock": 20, "desc": "表面から色を分離します。対象物の同意は不要です。", "pool": ["鏡", "写真", "青", "影", "赤", "透明"]}, {"id": "m18", "name": "基底構造ガチャ", "group": "基底", "cost": 1600, "unlock": 45, "desc": "法則、天体、総体。端末は利用を推奨していない。", "pool": ["距離", "摩擦", "重力", "因果", "月", "時間", "世界"]}, {"id": "m19", "name": "物理ガチャ", "group": "基底", "cost": 950, "unlock": 32, "desc": "日常的に使用される規則。変更後の動作は未検証。", "pool": ["真空", "温度", "気圧", "摩擦", "慣性", "重力", "光"]}, {"id": "m20", "name": "天文ガチャ", "group": "基底", "cost": 1100, "unlock": 36, "desc": "地表から離れた対象。排出位置は地表です。", "pool": ["軌道", "月", "彗星", "星", "真空"]}, {"id": "m21", "name": "境界ガチャ", "group": "基底", "cost": 850, "unlock": 30, "desc": "区切りと、その両側。どちら側かは受領時に決定します。", "pool": ["住所", "橋", "国境", "距離", "出口", "外側"]}, {"id": "m22", "name": "会計ガチャ", "group": "基底", "cost": 700, "unlock": 26, "desc": "残高、証明、手続き。現金との交換には対応しません。", "pool": ["硬貨", "領収書", "判子", "許可", "負債", "零"]}, {"id": "m23", "name": "未定義ガチャ", "group": "基底", "cost": 2000, "unlock": 50, "desc": "対象欄を空欄のまま実行します。処理結果も対象に含みます。", "pool": ["空白", "零", "確率", "無限", "観測者", "可能性", "世界"]}];
+
+
+
+// The catalogue remains in this document. All progression is local to this browser.
+const $=id=>document.getElementById(id);
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ranks=['N','R','SR','SSR','UR','???'];
+const byName=new Map(items.map(x=>[x.n,x]));
+const byMachine=new Map(machines.map(x=>[x.id,x]));
+const KEY='sekai-catalogue-v1', BACKUP=KEY+'-backup';
+const weights={生活:[65,29,6,0,0,0],現地:[20,42,32,6,0,0],記録:[0,20,45,30,5,0],基底:[0,5,20,42,31,2]};
+const discovery={N:35,R:70,SR:150,SSR:300,UR:700,'???':1800};
+const skillDefs=[
+{id:'appraisal',name:'再鑑定',at:6,cost:6,desc:'すべての売却価格 +20%。'},
+{id:'observation',name:'観測強化',at:12,cost:10,desc:'保管品の観測収入 +30%。'},
+{id:'priority',name:'優先照会',at:18,cost:14,desc:'通常抽選の25%を、その台の未発見品への照会に変更。'},
+{id:'permit',name:'継続利用許可',at:24,cost:18,desc:'すべての抽選料金 −15%。'},
+{id:'field',name:'現地手当',at:32,cost:22,desc:'周辺調査の支給額が60円から120円になる。'},
+{id:'archive',name:'記録複写',at:45,cost:28,desc:'初回使用で得られる研究点 +2。'}
 ];
-let S={money:650,integrity:100,seen:{},bag:{},earned:0,spent:0,pulls:0,quests:[],questSerial:0};const $=id=>document.getElementById(id);
-function level(){return 1+Math.floor(Object.keys(S.seen).length/6)}function itemByName(n){return items.find(x=>x.n===n)}function log(s){let e=document.createElement('div');e.className='row';e.innerHTML='<span class="dim">['+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})+']</span> '+s;$('logs').prepend(e)}function addMoney(n,why){S.money+=n;S.earned+=n;if(why)log(why+' +'+n+'円')}function spend(n){S.money-=n;S.spent+=n}
-function incomeRate(){let z=0;for(const [n,q] of Object.entries(S.bag)){let it=itemByName(n);if(it)z+=obs[it.r]*q}return Math.round(z*10)/10}
-function pick(m){let pool=items.filter(x=>m.cats.includes(x.c));let total=pool.reduce((a,x)=>a+(m.weights[x.r]||0),0),r=Math.random()*total;for(const x of pool){r-=m.weights[x.r]||0;if(r<=0)return x}return pool[0]}
-function unlocked(m){return S.earned>=m.unlock}
-function renderMachines(){ $('machines').innerHTML=machines.map((m,i)=>{let ok=unlocked(m),need=Math.max(0,m.unlock-S.earned);return `<div class="machine ${ok?'':'lock'}"><div class="mhead"><div class="mname">${m.name}</div><div class="mmeta">${m.cost}円 / ${ok?'利用可能':'累計収入 '+m.unlock+'円で解禁'}</div></div><div class="mdesc">${m.desc}${ok?'':`<br>あと ${need}円 の収入が必要。`}</div><button data-machine="${i}" ${(!ok||S.money<m.cost)?'disabled':''}>${ok?'抽選する':'LOCKED'}</button></div>`}).join('');document.querySelectorAll('[data-machine]').forEach(b=>b.onclick=()=>pull(+b.dataset.machine))}
-function rarityText(it){return `<span class="${rareClass(it.r)}">${it.r} // ${it.c}</span>`}let current=null;
-function pull(i){let m=machines[i];if(!unlocked(m)||S.money<m.cost)return;spend(m.cost);S.pulls++;current=pick(m);let fresh=!S.seen[current.n];S.seen[current.n]=(S.seen[current.n]||0)+1;$('rarity').className='rarity '+rareClass(current.r);$('rarity').textContent=current.r+' // '+current.c+(fresh?' // NEW':'');$('itemname').className='itemname '+rareClass(current.r);$('itemname').textContent=current.n;$('type').textContent=current.t;$('desc').textContent=current.d;$('sellprice').textContent=values[current.r];$('result').classList.add('on');log(m.name+'：'+current.n+' ['+current.r+']'+(fresh?' を新規登録。':''));checkQuests();render()}
-function finishCurrent(){current=null;$('result').classList.remove('on')}
-$('keep').onclick=()=>{if(!current)return;S.bag[current.n]=(S.bag[current.n]||0)+1;log(current.n+'を保管庫へ移動。');finishCurrent();render()};$('sell').onclick=()=>{if(!current)return;let p=values[current.r];addMoney(p,current.n+'を売却。');finishCurrent();render()};$('return').onclick=()=>{if(!current)return;log(current.n+'を世界へ返却。');finishCurrent();render()};$('use').onclick=()=>{if(!current)return;log(current.u);S.integrity-=current.x;finishCurrent();render()};
-function renderInv(){let entries=Object.entries(S.bag).filter(x=>x[1]>0);$('incomeText').textContent='観測 '+incomeRate()+'円/分';$('inv').innerHTML=entries.length?entries.map(([n,q])=>{let x=itemByName(n);return `<div class="row"><div class="invtitle ${rareClass(x.r)}">${x.n} ×${q}</div><span class="dim">${x.r} / ${x.c} / 観測 ${obs[x.r]}円/分</span><br>${x.d}<br><button class="ghost" data-sellbag="${x.n}">1個売却 ${values[x.r]}円</button></div>`}).join(''):'<div class="row dim">保管庫は空です。保管した項目は毎分、観測収入を発生させます。</div>';document.querySelectorAll('[data-sellbag]').forEach(b=>b.onclick=()=>{let n=b.dataset.sellbag,x=itemByName(n);if(S.bag[n]>0){S.bag[n]--;addMoney(values[x.r],n+'を保管庫から売却。');render()}})}
-const questTemplates=[
-{txt:'物品を3種類登録',goal:3,reward:220,test:()=>items.filter(x=>x.c==='物品'&&S.seen[x.n]).length},
-{txt:'生物を2種類登録',goal:2,reward:420,test:()=>items.filter(x=>x.c==='生物'&&S.seen[x.n]).length},
-{txt:'場所を2種類登録',goal:2,reward:500,test:()=>items.filter(x=>x.c==='場所'&&S.seen[x.n]).length},
-{txt:'SR以上を4種類登録',goal:4,reward:650,test:()=>items.filter(x=>['SR','SSR','UR','???'].includes(x.r)&&S.seen[x.n]).length},
-{txt:'SSR以上を2種類登録',goal:2,reward:900,test:()=>items.filter(x=>['SSR','UR','???'].includes(x.r)&&S.seen[x.n]).length},
-{txt:'10種類登録',goal:10,reward:600,test:()=>Object.keys(S.seen).length},
-{txt:'20種類登録',goal:20,reward:1600,test:()=>Object.keys(S.seen).length}
+const reports=[
+{id:'commute',name:'通勤経路',needs:['傘','雨','駅'],reward:600,desc:'雨天でも列車は到着しない。通勤の実施は認定された。'},
+{id:'breakfast',name:'朝食調査',needs:['パン','卵','塩'],reward:300,desc:'栄養成分は概ね正常。卵の打音は食事時間と一致しなかった。'},
+{id:'desk',name:'事務用品',needs:['消しゴム','輪ゴム','封筒'],reward:250,desc:'書類の処理に必要な物品が揃った。書類は届いていない。'},
+{id:'lost',name:'遺失物照合',needs:['鍵','靴下','軍手'],reward:350,desc:'いずれも対になる対象が欠落している。同一人物の所有物とは限らない。'},
+{id:'mail',name:'配達記録',needs:['封筒','切手','住所'],reward:450,desc:'配達先は確認された。受取人の存在は別件として扱う。'},
+{id:'dog',name:'路肩の調査員',needs:['犬','電柱','足音'],reward:650,desc:'定期調査の実施を確認。報告書は嗅覚情報で提出された。'},
+{id:'forest',name:'林床の通信',needs:['苔','種','菌糸'],reward:550,desc:'標本間に通信経路を確認。調査局の回線は使用されていない。'},
+{id:'tide',name:'潮位観測',needs:['貝殻','潮汐','月'],reward:1400,desc:'周期の一致を確認。月の返却先には海を指定できない。'},
+{id:'stairs',name:'避難経路',needs:['廊下','階段','出口'],reward:1000,desc:'出口までの経路を確保した。外へ出られるかは未確認。'},
+{id:'week',name:'週次報告',needs:['昨日','火曜日','明日'],reward:1600,desc:'一週間のうち三項目を受領。残りの日付は引き続き勤務扱い。'},
+{id:'sleep',name:'睡眠調査',needs:['眠気','夢','記憶'],reward:900,desc:'被験者は睡眠した。報告者が同一人物である保証はない。'},
+{id:'music',name:'演奏記録',needs:['音叉','ジャズ','沈黙'],reward:1100,desc:'演奏前後の状態を記録。演奏中の分類には失敗した。'},
+{id:'light',name:'光学検査',needs:['鏡','影','透明'],reward:1000,desc:'反射、遮光、透過を確認。検査員の像だけが残っている。'},
+{id:'office',name:'会計監査',needs:['硬貨','領収書','負債'],reward:1300,desc:'資産と負債を照合した。硬貨の額面のみが一致した。'},
+{id:'orbit',name:'衛星運用',needs:['重力','月','軌道'],reward:2400,desc:'周回運動は安定している。地上から複数の問い合わせあり。'},
+{id:'world',name:'世界の受領',needs:['世界','観測者','因果'],reward:6000,desc:'受領者、受領物、受領の原因を確認した。外部監査は実施不能。'}
 ];
-function ensureQuests(){while(S.quests.length<3){let t=questTemplates[Math.floor(Math.random()*questTemplates.length)];if(S.quests.some(q=>q.txt===t.txt))continue;S.quests.push({id:++S.questSerial,txt:t.txt,goal:t.goal,reward:t.reward,done:false,claimed:false})}}
-function questProgress(q){let t=questTemplates.find(x=>x.txt===q.txt);return Math.min(q.goal,t.test())}function checkQuests(){for(const q of S.quests)if(!q.claimed&&questProgress(q)>=q.goal)q.done=true}
-function renderQuests(){ensureQuests();checkQuests();$('questList').innerHTML=S.quests.map(q=>{let p=questProgress(q);return `<div class="row quest ${q.done?'done':''}"><b>${q.txt}</b><div class="progress">${p} / ${q.goal}　報酬 ${q.reward}円</div>${q.done&&!q.claimed?`<button class="claim" data-claim="${q.id}">報酬を受け取る</button>`:''}</div>`}).join('');document.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{let q=S.quests.find(x=>x.id==b.dataset.claim);if(q&&q.done&&!q.claimed){q.claimed=true;addMoney(q.reward,'調査依頼完了。');S.quests=S.quests.filter(x=>!x.claimed);ensureQuests();render()}})}
-const skills=[['再鑑定',6,'売却価格が10%上がる予定。現在は予備登録。'],['観測強化',12,'観測収入が増える予定。現在は予備登録。'],['優先照会',18,'上位レアの重みを調整する予定。現在は予備登録。'],['保管拡張',24,'複数運用機能を解禁する予定。現在は予備登録。']];
-function renderSkills(){let n=Object.keys(S.seen).length,lv=level(),next=lv*6;$('skillList').innerHTML=`<div class="panel"><b>収集レベル ${lv}</b><div class="bar"><i style="width:${((n%6)/6)*100}%"></i></div><span class="dim">次のレベルまで ${next-n} 種類</span></div><div class="skillgrid">${skills.map(s=>`<button class="skill" ${n<s[1]?'disabled':''}><strong>${s[0]} [${s[1]}種]</strong><span>${s[2]} ${n<s[1]?'// 未解禁':'// 解禁済み'}</span></button>`).join('')}</div>`}
-function render(){let n=Object.keys(S.seen).length;$('money').textContent=Math.floor(S.money).toLocaleString();$('found').textContent=n;$('lv').textContent=level();$('rate').textContent=incomeRate();$('integrity').textContent=Math.max(0,S.integrity).toFixed(3);renderMachines();renderInv();renderQuests();renderSkills()}
-setInterval(()=>{let r=incomeRate();if(r>0){S.money+=r/12;S.earned+=r/12;render()}},5000);
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.view').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.view).classList.add('on');render()});
-ensureQuests();log('端末起動。拾得物ガチャが利用可能。');log('調査局から初期運用資金650円を受領。');render();
+function freshState(){return {version:1,money:650,earned:0,spent:0,pulls:0,integrity:100,research:0,seen:{},bag:{},used:{},skills:{},claimed:{},reports:{},mastered:{},streak:{},current:null,lastAt:Date.now(),surveyAt:0,logs:[]};}
+function validate(raw){
+ if(!raw||raw.version!==1)throw Error('この記録の形式には対応していません。');
+ const s=freshState();
+ for(const k of ['money','earned','spent','pulls','integrity','research','lastAt','surveyAt']){
+  if(typeof raw[k]!=='number'||!Number.isFinite(raw[k])||raw[k]<0||raw[k]>1e15)throw Error('記録の数値を読み取れません。');
+  s[k]=raw[k];
+ }
+ s.integrity=Math.min(100,s.integrity);
+ for(const k of ['seen','bag','used']){
+  for(const [n,q] of Object.entries(raw[k]||{})){
+   if(byName.has(n)&&Number.isSafeInteger(q)&&q>0&&q<=1e8)s[k][n]=q;
+  }
+ }
+ for(const [k,ids] of [['skills',skillDefs.map(x=>x.id)],['reports',reports.map(x=>x.id)],['mastered',machines.map(x=>x.id)]]){
+  for(const id of ids)if(raw[k]?.[id]===true)s[k][id]=true;
+ }
+ for(const [id,v] of Object.entries(raw.claimed||{}))if(/^(discover|use|pull)-\d+$/.test(id)&&v===true)s.claimed[id]=true;
+ for(const m of machines)s.streak[m.id]=Math.min(7,Math.max(0,Math.floor(Number(raw.streak?.[m.id])||0)));
+ if(raw.current&&byName.has(raw.current.n)&&byMachine.has(raw.current.machine))s.current={n:raw.current.n,machine:raw.current.machine,fresh:!!raw.current.fresh};
+ s.logs=Array.isArray(raw.logs)?raw.logs.filter(x=>x&&typeof x.text==='string'&&typeof x.time==='string').slice(0,100).map(x=>({text:x.text.slice(0,800),time:x.time.slice(0,40)})):[];
+ s.lastAt=Math.min(Date.now(),s.lastAt);
+ s.surveyAt=Math.min(Date.now()+30000,s.surveyAt);
+ return s;
+}
+let S=freshState(),storageWarning='',activeView='gacha',activeGroup='生活',selected='m0',catalogueFilter='all',query='';
+try{
+ const saved=localStorage.getItem(KEY);
+ if(saved){try{S=validate(JSON.parse(saved));}catch(e){
+  const backup=localStorage.getItem(BACKUP);
+  if(!backup)throw e;
+  S=validate(JSON.parse(backup));storageWarning='直近の記録を読めなかったため、予備記録から復旧しました。';
+ }}
+}catch(e){storageWarning='保存記録を読み込めません。現在の進行は記録の書き出しで保管してください。';}
+function log(text){S.logs.unshift({time:new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}),text});S.logs=S.logs.slice(0,100);}
+function save(){
+ try{
+  const previous=localStorage.getItem(KEY);
+  if(previous){try{validate(JSON.parse(previous));localStorage.setItem(BACKUP,previous);}catch{}}
+  localStorage.setItem(KEY,JSON.stringify(S));
+ }catch{storageWarning='自動保存できません。記録タブから記録を書き出してください。';}
+}
+function count(){return Object.keys(S.seen).length;}
+function level(){return 1+Math.floor(count()/6);}
+function price(m){return Math.ceil(m.cost*(S.skills.permit?.85:1));}
+function sellPrice(x){return Math.floor(values[x.r]*(S.skills.appraisal?1.2:1));}
+function unlocked(m){return count()>=m.unlock||S.earned>=m.unlock*100;}
+function incomeRate(){
+ let total=0;for(const [n,q] of Object.entries(S.bag))total+=obs[byName.get(n).r]*q*8;
+ return +(2+total*(S.skills.observation?1.3:1)*(1+Object.keys(S.reports).length*.05)).toFixed(2);
+}
+function addMoney(n){S.money+=n;S.earned+=n;}
+function settle(now=Date.now()){
+ const elapsed=Math.max(0,Math.min(8*3600000,now-S.lastAt));
+ const amount=incomeRate()*elapsed/60000;
+ if(amount>0)addMoney(amount);
+ S.lastAt=now;return amount;
+}
+function odds(m){
+ const present=ranks.filter(r=>m.pool.some(n=>byName.get(n).r===r)&&weights[m.group][ranks.indexOf(r)]>0);
+ const total=present.reduce((v,r)=>v+weights[m.group][ranks.indexOf(r)],0);
+ return present.map(r=>({r,p:weights[m.group][ranks.indexOf(r)]/total}));
+}
+function pick(m){
+ const unseen=m.pool.filter(n=>!S.seen[n]);
+ if(unseen.length&&((S.streak[m.id]||0)>=7||(S.skills.priority&&Math.random()<.25)))return byName.get(unseen[Math.floor(Math.random()*unseen.length)]);
+ let roll=Math.random(),distribution=odds(m),r=distribution.at(-1).r;
+ for(const entry of distribution){roll-=entry.p;if(roll<0){r=entry.r;break;}}
+ const pool=m.pool.filter(n=>byName.get(n).r===r);
+ return byName.get(pool[Math.floor(Math.random()*pool.length)]);
+}
+function pull(id){
+ settle();const m=byMachine.get(id);
+ if(!m||S.current||!unlocked(m)||S.money<price(m))return false;
+ const cost=price(m);S.money-=cost;S.spent+=cost;S.pulls++;
+ const x=pick(m),isNew=!S.seen[x.n];
+ S.seen[x.n]=(S.seen[x.n]||0)+1;S.streak[id]=isNew?0:Math.min(7,(S.streak[id]||0)+1);
+ S.current={n:x.n,machine:id,fresh:isNew};
+ log(m.name+'：'+x.n+' ['+x.r+']。'+(isNew?'新規登録。':'既登録。'));
+ if(isNew){addMoney(discovery[x.r]);log('初回登録手当 '+discovery[x.r]+'円を支給。');}
+ if(!S.mastered[id]&&m.pool.every(n=>S.seen[n])){
+  S.mastered[id]=true;addMoney(m.cost*4);S.research+=3;
+  log(m.name+'の調査完了。'+m.cost*4+'円、研究3点を支給。');
+ }
+ commit();$('result')?.scrollIntoView({block:'nearest',behavior:'smooth'});return true;
+}
+function operate(action,n,fromBag=false){
+ settle();const x=byName.get(n);
+ if(!x||!['keep','sell','use','return'].includes(action)||fromBag&&action==='keep')return false;
+ if(fromBag){if(!(S.bag[n]>0))return false;}else if(S.current?.n!==n)return false;
+ if(fromBag){S.bag[n]--;if(!S.bag[n])delete S.bag[n];}else S.current=null;
+ if(action==='keep'){S.bag[n]=(S.bag[n]||0)+1;log(n+'を保管庫へ移動。');}
+ if(action==='sell'){addMoney(sellPrice(x));log(n+'を売却。'+sellPrice(x)+'円を受領。');}
+ if(action==='return'){S.research++;S.integrity=Math.min(100,S.integrity+.6);log(n+'を返却。研究1点。整合率を0.600ポイント補正。');}
+ if(action==='use'){
+  log(x.u);S.integrity=Math.max(0,S.integrity-x.x);
+  if(!S.used[n]){
+   const points=2+ranks.indexOf(x.r)+(S.skills.archive?2:0);
+   S.research+=points;log('初回使用を記録。研究'+points+'点。');
+  }
+  S.used[n]=(S.used[n]||0)+1;
+  if(S.integrity<=0)log('整合率0%。端末は業務を継続します。返却による補正を受け付けています。');
+ }
+ commit();return true;
+}
+function survey(){
+ settle();if(Date.now()<S.surveyAt)return false;
+ const pay=S.skills.field?120:60;
+ addMoney(pay);S.surveyAt=Date.now()+30000;
+ const notes=['路肩を確認した。路肩は同じ位置にある。','排出口を清掃した。清掃前より狭い。','周辺の影を数えた。今回は一致した。','保管庫の外寸を測った。内寸については記載しない。','端末の足元を調べた。端末の足元だった。'];
+ log(notes[Math.floor(Math.random()*notes.length)]+' 調査手当'+pay+'円。');commit();return true;
+}
+function milestone(type){
+ const step=type==='discover'?5:type==='use'?3:10;
+ const total=type==='discover'?count():type==='use'?Object.keys(S.used).length:S.pulls;
+ let goal=step;while(S.claimed[type+'-'+goal])goal+=step;
+ const maximum=type==='pull'?Infinity:items.length;
+ return {type,goal,total,done:total>=goal,finished:goal>maximum,id:type+'-'+goal,reward:type==='discover'?200+goal*25:type==='use'?150+goal*20:120+goal*8,label:type==='discover'?'カタログ登録':type==='use'?'使用試験':'抽選稼働記録',unit:type==='pull'?'回':'種類'};
+}
+function claim(type){
+ settle();if(!['discover','use','pull'].includes(type))return false;
+ const q=milestone(type);if(!q.done||q.finished)return false;
+ S.claimed[q.id]=true;addMoney(q.reward);S.research+=2;log(q.label+' '+q.goal+q.unit+'の報告を受理。'+q.reward+'円、研究2点。');commit();return true;
+}
+function report(id){
+ settle();const r=reports.find(x=>x.id===id);
+ if(!r||S.reports[id]||!r.needs.every(n=>S.bag[n]>0))return false;
+ S.reports[id]=true;addMoney(r.reward);S.research+=4;
+ log('組合せ調査「'+r.name+'」：'+r.desc+' '+r.reward+'円、研究4点。');commit();return true;
+}
+function buy(id){
+ settle();const s=skillDefs.find(x=>x.id===id);
+ if(!s||S.skills[id]||count()<s.at||S.research<s.cost)return false;
+ S.skills[id]=true;S.research-=s.cost;log('技能「'+s.name+'」を認可。'+s.desc);commit();return true;
+}
+function repair(){
+ settle();if(S.integrity>=100||S.research<3)return false;
+ S.research-=3;S.integrity=Math.min(100,S.integrity+10);log('整合性を再計算。最大10ポイントを補正。研究3点を使用。');commit();return true;
+}
+function money(n){return Math.floor(n).toLocaleString('ja-JP');}
+function button(label,action,id='',disabled=false,cls=''){return '<button class="'+cls+'" data-action="'+action+'" data-id="'+escapeHTML(id)+'" '+(disabled?'disabled':'')+'>'+label+'</button>';}
+function commit(){save();render();}
+function renderHeader(){
+ $('money').textContent=money(S.money);$('found').textContent=count()+' / '+items.length;$('lv').textContent=level();$('rate').textContent=incomeRate();$('integrity').textContent=S.integrity.toFixed(3);$('research').textContent=S.research;
+ $('status').textContent=S.integrity>80?'通常運用。対象の存在を順次確認しています。':S.integrity>45?'整合性に軽微な欠損。昨日の報告書は二部存在します。':S.integrity>0?'整合性低下。廊下の長さを信用しないでください。':'整合性なし。業務の継続に支障はありません。';
+ $('storageNotice').textContent=storageWarning;$('storageNotice').hidden=!storageWarning;
+ const ready=Date.now()>=S.surveyAt;
+ const b=$('survey');if(b){b.disabled=!ready;b.textContent=ready?'周辺調査 ＋'+(S.skills.field?120:60)+'円':'次の調査まで '+Math.ceil((S.surveyAt-Date.now())/1000)+'秒';}
+ document.querySelectorAll('[data-action="draw"]').forEach(b=>{const m=byMachine.get(b.dataset.id);b.disabled=!!S.current||!unlocked(m)||S.money<price(m);b.textContent=S.current?'排出物の処理を待機中':!unlocked(m)?'利用資格なし':S.money<price(m)?'資金不足 · 周辺調査を利用できます':'抽選する';});
+}
+function renderGacha(){
+ const groupMachines=machines.filter(m=>m.group===activeGroup);
+ $('districts').innerHTML=['生活','現地','記録','基底'].map(g=>button(g+' <small>'+machines.filter(m=>m.group===g&&unlocked(m)).length+'/6</small>','group',g,false,g===activeGroup?'on':'')).join('');
+ $('machineGrid').innerHTML=groupMachines.map(m=>{
+  const found=m.pool.filter(n=>S.seen[n]).length;
+  return '<button class="machineCard '+(selected===m.id?'selected ':'')+(!unlocked(m)?'locked':'')+'" data-action="select" data-id="'+m.id+'"><span class="mini">'+m.id.toUpperCase().padStart(3,'0')+' / '+(unlocked(m)?'稼働可能':'未解禁')+'</span><strong>'+m.name.replace('ガチャ','')+'</strong><span>'+price(m)+'円 <span class="dim">· '+found+'/'+m.pool.length+'種</span></span><i class="meter"><i style="width:'+found/m.pool.length*100+'%"></i></i></button>';
+ }).join('');
+ const m=byMachine.get(selected),remaining=m.pool.filter(n=>!S.seen[n]).length;
+ $('selectedMachine').innerHTML='<div class="mhead"><div><div class="mini">'+m.group+' / '+m.id.toUpperCase()+'</div><h2>'+m.name+'</h2></div><span class="cost">'+price(m)+'<small> 円</small></span></div><p>'+m.desc+'</p><p class="meta">'+(unlocked(m)?remaining?'未登録 '+remaining+'種。重複が7回続いた次の抽選は未登録品。':'全品登録済み。引き続き利用できます。':m.unlock+'種発見 または 累計収入'+money(m.unlock*100)+'円で解禁。')+'</p>'+button(S.current?'排出物の処理を待機中':!unlocked(m)?'利用資格なし':S.money<price(m)?'資金不足 · 周辺調査を利用できます':'抽選する','draw',m.id,!!S.current||!unlocked(m)||S.money<price(m),'primary')+'<details><summary>排出記録・通常確率</summary><p class="meta">'+odds(m).map(x=>'<span class="'+rareClass(x.r)+'">'+x.r+' '+(x.p*100).toFixed(1)+'%</span>').join(' / ')+'</p><p class="meta">同レア内は均等。未登録品の保証・優先照会は通常確率より優先されます。</p><div class="pool">'+m.pool.map(n=>'<span class="'+(S.seen[n]?rareClass(byName.get(n).r):'dim')+'">'+(S.seen[n]?n:'未登録')+'</span>').join('')+'</div><p class="meta">この台の全品登録：'+money(m.cost*4)+'円と研究3点（初回のみ）。</p></details>';
+ renderResult();
+}
+function renderResult(){
+ const el=$('result');el.hidden=!S.current;if(!S.current){el.innerHTML='';return;}
+ const x=byName.get(S.current.n);
+ el.innerHTML='<div class="mini '+rareClass(x.r)+'">'+x.r+' // '+x.c+(S.current.fresh?' // 新規登録':' // 既登録')+'</div><h2 class="itemname '+rareClass(x.r)+'">'+x.n+'</h2><div class="meta">'+x.t+' · 保管中 '+(S.bag[x.n]||0)+'個</div><p class="desc">'+escapeHTML(x.d)+'</p><div class="actions">'+button('保管','keep',x.n,false,'primary')+button('使用','use',x.n)+button('返却','return',x.n)+button('売却 '+sellPrice(x)+'円','sell',x.n)+'</div><p class="meta">保管：基礎観測 '+obs[x.r]*8+'円/分。使用：'+(S.used[x.n]?'試験済み':'初回研究 '+(2+ranks.indexOf(x.r)+(S.skills.archive?2:0))+'点')+'、整合率 −'+x.x+'。返却：研究1点、整合率 ＋0.6。</p>';
+}
+function renderInventory(){
+ const list=items.filter(x=>S.bag[x.n]>0);
+ $('inventoryList').innerHTML=list.length?list.map(x=>'<article class="row"><div class="mhead"><h3 class="'+rareClass(x.r)+'">'+x.n+' <small>×'+S.bag[x.n]+'</small></h3><span class="meta">'+x.r+' / '+x.c+'</span></div><p class="desc">'+escapeHTML(x.d)+'</p><div class="actions">'+button('1個売却 '+sellPrice(x)+'円','bag-sell',x.n)+button(S.used[x.n]?'使用（試験済み）':'使用・初回試験','bag-use',x.n)+button('返却','bag-return',x.n)+'</div></article>').join(''):'<p class="empty">保管庫は空です。排出物を保管すると観測収入が発生します。重複品も観測対象です。</p>';
+}
+function renderCatalogue(){
+ const matches=items.filter(x=>(!query||[x.n,x.c,x.t].some(s=>s.includes(query)))&&(catalogueFilter==='all'||catalogueFilter==='seen'&&S.seen[x.n]||catalogueFilter==='unseen'&&!S.seen[x.n]||catalogueFilter==='used'&&S.used[x.n]));
+ $('catalogueCount').textContent=matches.length+'件';
+ $('catalogueList').innerHTML=matches.map(x=>S.seen[x.n]?'<details class="row"><summary><span class="'+rareClass(x.r)+'">'+x.n+'</span><span class="meta">'+x.r+' · '+(S.used[x.n]?'試験済み':'未試験')+'</span></summary><p class="desc">'+escapeHTML(x.d)+'</p>'+(S.used[x.n]?'<p class="testrecord">使用記録：'+escapeHTML(x.u)+'</p>':'')+'<p class="meta">登録 '+S.seen[x.n]+'回 / 保管 '+(S.bag[x.n]||0)+'個</p><p class="meta">排出台：'+machines.filter(m=>m.pool.includes(x.n)).map(m=>m.name.replace('ガチャ','')).join('、')+'</p></details>':'<div class="row dim"><span>未登録</span><span class="meta"> / '+x.c+' · '+machines.filter(m=>m.pool.includes(x.n)).map(m=>m.name.replace('ガチャ','')).join('、')+'</span></div>').join('')||'<p class="empty">該当する項目はありません。</p>';
+}
+function renderQuests(){
+ $('questList').innerHTML=['discover','use','pull'].map(t=>{
+  const q=milestone(t);
+  return '<article class="panel"><h3>'+q.label+'</h3><p class="meta">'+(q.finished?'全報告受理済み':Math.min(q.total,q.goal)+' / '+q.goal+' '+q.unit+' · '+q.reward+'円 / 研究2点')+'</p><div class="meter"><i style="width:'+(q.finished?100:Math.min(100,q.total/q.goal*100))+'%"></i></div>'+button(q.finished?'完了':q.done?'報告を提出':'調査中','claim',t,q.finished||!q.done)+'</article>';
+ }).join('');
+ $('reportsList').innerHTML=reports.map(r=>{
+  const done=S.reports[r.id],ready=r.needs.every(n=>S.bag[n]>0);
+  return '<article class="panel '+(done?'complete':'')+'"><div class="mhead"><h3>'+r.name+'</h3><span class="meta">'+(done?'受理済み':r.reward+'円')+'</span></div><div class="pool">'+r.needs.map(n=>'<span class="'+(S.bag[n]>0?'present':'dim')+'">'+n+(S.bag[n]>0?' ✓':'')+'</span>').join('')+'</div>'+(done?'<p>'+r.desc+'</p>':button('組合せを報告','report',r.id,!ready))+'</article>';
+ }).join('');
+}
+function renderSkills(){
+ $('skillList').innerHTML=skillDefs.map(s=>'<article class="panel"><div class="mhead"><h3>'+s.name+'</h3><span class="meta">'+(S.skills[s.id]?'認可済み':'研究 '+s.cost+'点')+'</span></div><p>'+s.desc+'</p>'+button(S.skills[s.id]?'常時有効':count()<s.at?s.at+'種の発見が必要':'認可を申請','buy',s.id,!!S.skills[s.id]||count()<s.at||S.research<s.cost)+'</article>').join('');
+ $('repair').disabled=S.research<3||S.integrity>=100;
+}
+function renderLogs(){$('logs').innerHTML=S.logs.map(l=>'<div class="row"><span class="meta">['+escapeHTML(l.time)+']</span> '+escapeHTML(l.text)+'</div>').join('');}
+function render(){
+ renderHeader();
+ if(activeView==='gacha')renderGacha();
+ if(activeView==='inventory')renderInventory();
+ if(activeView==='catalogue')renderCatalogue();
+ if(activeView==='quests')renderQuests();
+ if(activeView==='skills')renderSkills();
+ if(activeView==='log')renderLogs();
+}
+function switchView(view){
+ if(!['gacha','inventory','catalogue','quests','skills','log'].includes(view))return;
+ activeView=view;
+ document.querySelectorAll('[data-view]').forEach(b=>{b.classList.toggle('on',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false');});
+ document.querySelectorAll('.view').forEach(el=>{el.hidden=el.id!==view;});render();
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b||b.disabled)return;
+ if(b.dataset.view){switchView(b.dataset.view);return;}
+ const {action,id}=b.dataset;
+ if(action==='draw')pull(id);
+ if(['keep','sell','use','return'].includes(action))operate(action,id);
+ if(action?.startsWith('bag-'))operate(action.slice(4),id,true);
+ if(action==='survey')survey();
+ if(action==='claim')claim(id);
+ if(action==='report')report(id);
+ if(action==='buy')buy(id);
+ if(action==='repair')repair();
+ if(action==='group'){activeGroup=id;selected=machines.find(m=>m.group===id).id;renderGacha();}
+ if(action==='select'){selected=id;renderGacha();}
+});
+$('search').addEventListener('input',e=>{query=e.target.value;renderCatalogue();});
+$('catalogueFilter').addEventListener('change',e=>{catalogueFilter=e.target.value;renderCatalogue();});
+$('export').onclick=()=>{
+ settle();save();const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='sekai-record-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+$('import').onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  if(file.size>2*1024*1024)throw Error('記録の容量が上限を超えています。');
+  const incoming=validate(JSON.parse(await file.text()));
+  if(!confirm('現在の進行を読み込んだ記録で置き換えます。続行しますか？'))return;
+  S=incoming;settle();log('外部記録を読み込みました。');commit();
+ }catch(err){$('importStatus').textContent=err.message||'記録を読み込めません。';}
+ finally{e.target.value='';}
+};
+const offline=settle();
+if(!S.logs.length)log('端末起動。初期運用資金650円を受領。生活区画の6台が利用可能。');
+else if(offline>=1)log('不在中の観測手当 '+money(offline)+'円を受領。算定上限8時間。');
+if(S.current){selected=S.current.machine;activeGroup=byMachine.get(selected).group;}
+commit();
+let saveTicks=0;
+setInterval(()=>{
+ const before=machines.filter(unlocked).length;settle();if(++saveTicks%5===0)save();renderHeader();
+ if(before!==machines.filter(unlocked).length&&activeView==='gacha')renderGacha();
+},1000);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){settle();save();}else{settle();render();}});
+window.addEventListener('pagehide',()=>{settle();save();});
+window.addEventListener('storage',e=>{
+ if(e.key!==KEY||!e.newValue)return;
+ try{S=validate(JSON.parse(e.newValue));render();}catch{}
+});
+
 </script></body></html>
