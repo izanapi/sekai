@@ -4,52 +4,69 @@
 <title>世界ガチャ — 調査局</title>
 <style>
 :root{color-scheme:dark;--bg:#0c0d0c;--fg:#d8d9d2;--dim:#969b90;--line:#353a31;--panel:#121510;--n:#c5c7c1;--r:#8ab9ff;--sr:#e5c95a;--ssr:#bd95ff;--ur:#ffad62;--x:#ff8282;--accent:#d2ddb1}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,"Noto Sans Mono CJK JP",monospace;font-size:16px;line-height:1.75}
-button,input,select{font:inherit}button{min-height:44px;padding:9px 15px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;touch-action:manipulation}
-button:hover:not(:disabled){border-color:var(--accent);background:#1e241a}button:disabled{opacity:.48;cursor:default}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{background:var(--bg);color:var(--fg);font:16px/1.65 ui-monospace,SFMono-Regular,Menlo,"Noto Sans Mono CJK JP",monospace}
+button,input,select{font:inherit}button{min-height:44px;padding:8px 12px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.48;cursor:default}button:hover:not(:disabled){border-color:var(--accent);background:#1e241a}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
 button.primary,button.on{background:var(--accent);color:#10140b;border-color:var(--accent)}button.primary:hover:not(:disabled),button.on:hover{background:#e4eccf;color:#10140b}
-main{max-width:1120px;margin:auto;padding:24px 24px 60px}header{border-top:3px solid var(--accent);padding:17px 0;border-bottom:1px solid var(--line)}
-.brand{display:flex;justify-content:space-between;gap:20px;align-items:center}h1{font-size:32px;line-height:1.2;margin:6px 0 10px;letter-spacing:.06em}h2{font-size:22px;line-height:1.5;margin:6px 0}h3{font-size:17px;margin:0}p{margin:12px 0}
-.mini{font-size:12px;letter-spacing:.06em;color:var(--dim)}.meta,small{font-size:13px;color:var(--dim)}.dim{color:var(--dim)}
-.stats{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px}.stats b{font-size:16px;color:var(--fg);font-weight:500}.stats .cash{color:var(--accent);font-size:22px}
-#status{font-size:13px;color:var(--dim);margin:12px 0 0}.stamp{text-align:right;color:var(--accent);font-size:13px;border:1px solid var(--line);padding:8px 12px;white-space:nowrap}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:18px 0 24px;overflow-x:auto}.tabs button{flex:1;min-width:76px;white-space:nowrap;border:0;border-bottom:2px solid transparent;font-size:14px;padding:10px}.tabs button.on{background:transparent;color:var(--accent);border-bottom-color:var(--accent)}
-[hidden]{display:none!important}.layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
-.sectionLabel{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;font-size:14px}
-#districts{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:14px}#districts button{padding:8px 4px;font-size:14px}#districts small{font-size:12px;color:inherit}
-#machineGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.machineCard{text-align:left;display:flex;flex-direction:column;padding:14px;gap:5px;background:#10130f;min-width:0}
-.machineCard strong{font-size:20px;font-weight:500;color:var(--fg)}.machineCard.selected{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent);background:#1b2017}.machineCard.locked .mini{color:#b4a488}.machineCard>span{font-size:14px}.machineCard>span.mini{font-size:12px}
-.meter{display:block;height:3px;background:#2e3328;width:100%;margin:8px 0 4px}.meter>i{display:block;background:var(--accent);height:100%}
-.panel,#selectedMachine,#result{border:1px solid var(--line);padding:20px;background:var(--panel);margin-bottom:16px}
-#result{border-color:#65744e;position:relative}#result:before{content:"排出物 / 処理待ち";display:block;border-bottom:1px dotted var(--line);font-size:12px;color:var(--dim);padding-bottom:8px;margin-bottom:15px}
-.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.cost{font-size:26px;color:var(--accent);white-space:nowrap}
-#selectedMachine>.primary{width:100%;margin:8px 0 12px}.itemname{font-size:32px;letter-spacing:.08em}.desc{white-space:pre-line;line-height:1.9}
-.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{flex:1;white-space:nowrap;font-size:14px;padding:10px}
-summary{cursor:pointer;min-height:44px;align-content:center;font-size:14px}.pool{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.pool>span{border:1px solid var(--line);padding:2px 8px;font-size:13px}.present{color:var(--accent);border-color:#5d7046!important}
-.surveyBox{margin-top:18px;padding:16px 0;border-top:1px dotted var(--line)}#survey{width:100%;font-size:14px}.surveyBox p{margin:8px 0 0}
-.intro{color:var(--dim);font-size:14px;margin-bottom:22px}.row{border-bottom:1px dotted var(--line);padding:18px 0;overflow-wrap:anywhere}.row:first-child{padding-top:4px}
-.row summary{display:flex;justify-content:space-between;gap:15px}.testrecord{border-left:2px solid var(--accent);padding-left:14px;font-size:14px;color:#b8c5a4}
-.empty{color:var(--dim);padding:25px 0}.filters{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.pager{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:18px 0}.pager button{font-size:14px}.filters label{flex:1;font-size:14px;min-width:160px}.filters input,.filters select{display:block;width:100%;min-height:44px;background:#141711;border:1px solid var(--line);padding:8px 10px;color:var(--fg)}
-#questList,#reportsList,#skillList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#questList{grid-template-columns:repeat(3,minmax(0,1fr))}#questList .panel,#reportsList .panel,#skillList .panel{margin:0}
-#questList button,#reportsList button,#skillList button{margin-top:12px;width:100%;font-size:14px}.complete{border-color:#52613e}.complete h3{color:var(--accent)}.complete p{font-size:14px}
-.sectionTitle{margin:30px 0 8px;font-size:20px}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:12px;font-size:12px;color:var(--dim)}
+[hidden]{display:none!important}main{height:100vh;height:100dvh;max-width:1040px;margin:auto;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:8px;overflow:hidden}
+header{flex:none;border-top:2px solid var(--accent);border-bottom:1px solid var(--line);padding:5px 0}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand .mini{display:none}h1{font-size:22px;line-height:1.25;margin:0 0 4px;letter-spacing:.06em}.stamp{font-size:12px;color:var(--dim)}.stamp br{display:none}.stamp{max-width:50%;text-align:right}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px 8px;font-size:13px;font-variant-numeric:tabular-nums}.stats>span{grid-column:span 2;white-space:nowrap}.stats>span:first-child{grid-column:span 3}.stats>span:nth-child(2){grid-column:span 2}.stats>span:nth-child(3){grid-column:span 1}.stats b{font-size:14px;font-weight:500;color:var(--fg)}.stats .cash{color:var(--accent);font-size:16px}
+h2{font-size:20px;line-height:1.4;margin:0}h3{font-size:17px;margin:0}p{margin:8px 0}.mini{font-size:12px;letter-spacing:.04em;color:var(--dim)}.meta,small{font-size:13px;color:var(--dim)}.dim{color:var(--dim)}
+.tabs{flex:none;order:3;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--line);gap:2px;margin:0}
+.tabs button{min-width:0;white-space:nowrap;border:0;border-top:2px solid transparent;padding:7px 2px;font-size:14px}.tabs button.on{background:#202619;color:var(--accent);border-top-color:var(--accent)}
+.view{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior-y:contain;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
+#gacha{overflow:hidden}.layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px;min-height:0;height:100%}.rack{min-height:0;overflow:auto;scrollbar-width:thin}.sectionLabel{display:flex;justify-content:space-between;font-size:14px;margin:0 0 6px}
+#districts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-bottom:6px}#districts button{font-size:14px;padding:7px 2px}#districts small{font-size:12px;color:inherit}
+#machineGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.machineCard{min-width:0;display:flex;flex-direction:column;text-align:left;gap:2px;padding:9px 10px;background:#10130f}
+.machineCard.selected{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent);background:#1b2017}.machineCard.locked .mini{color:#b4a488}.machineCard strong{font-size:18px;font-weight:500}.machineCard>span{font-size:13px}.machineCard>span.mini{font-size:12px}
+.meter{display:block;height:3px;background:#2e3328;width:100%;margin:6px 0 2px}.meter>i{display:block;background:var(--accent);height:100%}
+.compactMachine{display:none}.compactMachine select{width:100%;min-height:44px;background:var(--panel);border:1px solid var(--line);color:var(--fg);font-size:14px;padding:7px}
+.surveyBox{margin-top:8px}.surveyBox p{margin:4px 0}.surveyBox button{width:100%;font-size:14px}
+.stage{min-height:0;min-width:0;display:flex;overflow:hidden}#result,#selectedMachine{width:100%;min-height:0;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);padding:12px;background:var(--panel);overflow:auto}
+#result{border-color:#65744e}#result:focus{outline:none}#result:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.machineReading,.resultReading{flex:1;min-height:40px;overflow:auto;overscroll-behavior-y:contain;scrollbar-width:thin}
+.resultHeading,.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex:none}.resultHeading{display:block}.itemname{font-size:28px;line-height:1.3;margin:3px 0;letter-spacing:.05em}.cost{font-size:22px;color:var(--accent);white-space:nowrap}
+.desc{white-space:pre-line;line-height:1.75;margin:0 0 8px}.actions{display:flex;gap:6px;flex-wrap:wrap;flex:none}.actions button{min-width:0;flex:1;font-size:14px;padding:8px 6px;white-space:nowrap}
+#selectedMachine>.primary{width:100%;flex:none;font-size:15px}.resultReading>details{border-top:1px dotted var(--line)}.lastReceipt{flex:none;font-size:13px;color:var(--accent);border-left:2px solid var(--accent);padding-left:8px;margin:0}
+summary{cursor:pointer;min-height:44px;align-content:center;font-size:14px}.help{flex:none;border-bottom:1px dotted var(--line)}.help>summary{color:var(--dim)}.help p{font-size:14px}.pool{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.pool>span{border:1px solid var(--line);padding:2px 6px;font-size:13px}.present{color:var(--accent);border-color:#5d7046!important}
+.panel{background:var(--panel);border:1px solid var(--line);padding:14px;margin:0}.panelScroll{min-height:0;flex:1;overflow:auto;overscroll-behavior-y:contain;scrollbar-width:thin}.panelScroll>.panel{margin-bottom:10px}
+.intro{color:var(--dim);font-size:14px;margin:0}.row{border-bottom:1px dotted var(--line);padding:12px 2px;overflow-wrap:anywhere}.row:first-child{padding-top:4px}.row summary{display:flex;justify-content:space-between;gap:10px}.testrecord{border-left:2px solid var(--accent);padding-left:12px;font-size:14px;color:#b8c5a4}.empty{color:var(--dim);padding:16px 0}
+.filters{display:flex;gap:6px;flex-wrap:wrap;flex:none;margin:0}.filters label{flex:1;min-width:0;font-size:13px}.filters input,.filters select{display:block;width:100%;min-width:0;min-height:44px;background:#141711;border:1px solid var(--line);padding:6px;color:var(--fg);font-size:16px}
+#catalogueList,#inventoryList{flex:1;min-height:70px;overflow:auto;overscroll-behavior-y:contain;scrollbar-width:thin}.pager{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px;margin:0}.pager button{font-size:14px;padding:7px}
+#questList,#reportsList,#skillList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#questList{grid-template-columns:repeat(3,minmax(0,1fr))}
+#questList button,#reportsList button,#skillList button{margin-top:10px;width:100%;font-size:14px}.complete{border-color:#52613e}.complete h3{color:var(--accent)}.complete p{font-size:14px}.sectionTitle{margin:20px 0 8px}
 .rare-N{color:var(--n)}.rare-R{color:var(--r)}.rare-SR{color:var(--sr)}.rare-SSR{color:var(--ssr)}.rare-UR{color:var(--ur)}.rare-X{color:var(--x)}
-#storageNotice{color:#ffc18b;border:1px solid #876544;padding:12px}.fileLabel{font-size:14px;display:block;margin-top:18px}.fileLabel input{display:block;max-width:100%;margin-top:7px;font-size:14px}#importStatus{color:#ffc18b}
-@media(max-width:700px){main{padding:14px 14px 40px}.layout{grid-template-columns:1fr;gap:18px}.stamp{font-size:12px;padding:6px}h1{font-size:28px}.stats{gap:5px 15px}.tabs{margin:14px 0 20px}.tabs button{min-width:66px;padding:9px 6px}#machineGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.machineCard{padding:10px;gap:3px}.machineCard strong{font-size:17px}.machineCard .mini{font-size:12px}.machineCard>span{font-size:13px}.machineCard .dim{display:block}#questList,#reportsList,#skillList{grid-template-columns:1fr}.panel,#selectedMachine,#result{padding:16px}.sectionLabel{margin-top:0}.surveyBox{margin-top:12px;padding-top:12px}.brand{gap:10px}}
-@media(max-width:370px){#machineGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.stamp{display:none}.stats{gap:5px 12px}.actions button{flex:1 1 40%}}
+#storageNotice{color:#ffc18b;border:1px solid #876544;padding:6px;margin:0;flex:none;font-size:13px;max-height:72px;overflow:auto}.fileLabel{font-size:14px;display:block;margin-top:12px}.fileLabel input{display:block;max-width:100%;margin-top:7px;font-size:14px}#importStatus{color:#ffc18b}#status{font-size:14px;color:var(--dim)}footer{display:none}
+@media(max-width:699px){
+ main{gap:6px}.stamp{display:none}.layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:8px}.rack{overflow:visible}.sectionLabel{display:none}
+ #machineGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.machineCard{padding:5px 7px;gap:0}.machineCard>span.mini,.machineCard>.meter{display:none}.machineCard strong{font-size:15px;line-height:1.4}.machineCard>span{font-size:12px}.machineCard .dim{font-size:12px}
+ .surveyBox{margin-top:5px}.surveyBox p{display:none}#result,#selectedMachine{padding:9px;gap:6px}.itemname{font-size:24px}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ #questList,#reportsList,#skillList{grid-template-columns:minmax(0,1fr)}.panel{padding:12px}
+}
+@media(max-width:699px) and (max-height:650px){
+ .rack{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px}#districts{grid-column:1/-1;margin:0}#machineGrid{display:none}.compactMachine{display:block}.surveyBox{margin:0}
+}
+@media(min-width:700px) and (max-height:600px){
+ .machineCard>span.mini,.machineCard>.meter{display:none}.machineCard{padding:4px 8px}.machineCard strong{font-size:15px}.surveyBox p,.sectionLabel{display:none}
+}
+@media(max-height:480px){
+ #gacha{overflow:auto}.layout{min-height:320px}.view{overflow:auto}.panelScroll{min-height:100px}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
 </style></head><body><main>
-<header><div class="brand"><div><div class="mini">UNIVERSAL ACQUISITION TERMINAL</div><h1>世界ガチャ</h1></div><div class="stamp">調査局 / 第四収集課<br>CATALOGUE BUILD 0.5</div></div>
-<div class="stats"><span>所持金 <b id="money" class="cash">650</b> 円</span><span>発見 <b id="found">0</b></span><span>LV <b id="lv">1</b></span><span>研究 <b id="research">0</b> 点</span><span>観測 <b id="rate">2</b> 円/分</span><span>整合率 <b id="integrity">100</b>%</span></div><p id="status"></p></header>
+<header><div class="brand"><div><div class="mini">UNIVERSAL ACQUISITION TERMINAL</div><h1>世界ガチャ</h1></div><div class="stamp">調査局 / 第四収集課<br>CATALOGUE BUILD 0.6</div></div>
+<div class="stats"><span>所持金 <b id="money" class="cash">650</b> 円</span><span>発見 <b id="found">0</b></span><span>LV <b id="lv">1</b></span><span>研究 <b id="research">0</b> 点</span><span>観測 <b id="rate">2</b> 円/分</span><span>整合率 <b id="integrity">100</b>%</span></div></header>
 <p id="storageNotice" hidden role="status"></p>
 <nav class="tabs" aria-label="端末メニュー"><button class="on" data-view="gacha" aria-current="page">ガチャ</button><button data-view="inventory">保管庫</button><button data-view="catalogue">図鑑</button><button data-view="quests">調査</button><button data-view="skills">技能</button><button data-view="log">記録</button></nav>
-<section id="gacha" class="view"><div class="layout"><div><div class="sectionLabel"><span>端末を選択</span><span class="mini">04 区画 / 24 台</span></div><div id="districts"></div><div id="machineGrid"></div><div class="surveyBox"><button id="survey" data-action="survey">周辺調査 ＋60円</button><p class="meta">30秒ごとに実施可能。所持品を消費しません。</p></div></div>
-<div><div id="result" hidden aria-live="polite"></div><div id="selectedMachine"></div><p class="meta">初回登録には手当を支給します。保管した品は観測収入を発生させます。発見記録は手放しても残ります。</p></div></div></section>
-<section id="inventory" class="view" hidden><h2>保管庫</h2><p class="intro">保管数に応じて観測手当を支給。端末維持費2円/分を含みます。不在時も最大8時間分を精算します。</p><div class="filters"><label>保管品を探す<input id="inventorySearch" type="search" placeholder="名称・分類" autocomplete="off"></label></div><div id="inventoryList"></div><nav class="pager" id="inventoryPager" aria-label="保管庫のページ"></nav></section>
-<section id="catalogue" class="view" hidden><div class="mhead"><h2>発見図鑑</h2><span id="catalogueCount" class="meta"></span></div><p class="intro">所有状況にかかわらず、登録した対象の記録を閲覧できます。</p><div class="filters"><label>照会語<input id="search" type="search" placeholder="名称・分類" autocomplete="off"></label><label>状態<select id="catalogueFilter"><option value="all">すべて</option><option value="seen">発見済み</option><option value="unseen">未発見</option><option value="used">使用試験済み</option></select></label><label>ガチャ台<select id="catalogueMachine"></select></label></div><div id="catalogueList"></div><nav class="pager" id="cataloguePager" aria-label="図鑑のページ"></nav></section>
-<section id="quests" class="view" hidden><h2>調査依頼</h2><p class="intro">登録数・初回使用数・稼働回数を報告してください。報告の受理後、次の目標を提示します。</p><div id="questList"></div><h2 class="sectionTitle">組合せ調査</h2><p class="intro">指定品を同時に保管すると報告できます。提出しても品は失われません。報告1件につき保管品の観測収入が恒久的に5%増加。各報告の研究手当は4点です。</p><div id="reportsList"></div></section>
-<section id="skills" class="view" hidden><h2>技能認可</h2><p class="intro">初回使用・返却・調査報告で研究点を取得できます。認可された技能は常時有効です。</p><div id="skillList"></div><div class="panel" style="margin-top:20px"><h3>整合性の補正</h3><p>研究3点で整合率を最大10ポイント回復。整合率は端末の報告文に影響します。抽選の資格は失われません。</p><button id="repair" data-action="repair">再計算を依頼 · 研究3点</button></div></section>
-<section id="log" class="view" hidden><h2>運用記録</h2><div class="panel"><p>このブラウザに自動保存します。端末を移す場合は記録を書き出してください。</p><button id="export">記録を書き出す</button><label class="fileLabel">保存した記録を読み込む<input type="file" id="import" accept=".json,application/json"></label><p id="importStatus" role="status"></p><p class="meta">直近100件の運用履歴を保存します。保管庫・図鑑・技能・未処理の排出物も記録に含まれます。</p></div><div id="logs"></div></section>
+<section id="gacha" class="view"><div class="layout"><div class="rack"><div class="sectionLabel"><span>端末を選択</span><span class="mini">04 区画 / 24 台</span></div><div id="districts"></div><div id="machineGrid"></div><label class="compactMachine"><select id="machineSelect" aria-label="ガチャ台を選択"></select></label><div class="surveyBox"><button id="survey" data-action="survey">周辺調査 ＋60円</button><p class="meta">30秒ごとに実施可能。所持品を消費しません。</p></div></div>
+<div class="stage"><div id="result" hidden tabindex="-1" aria-live="polite"></div><div id="selectedMachine"></div></div></div></section>
+<section id="inventory" class="view" hidden><h2>保管庫</h2><details class="help"><summary>案内・条件</summary><p>保管数に応じて観測手当を支給。端末維持費2円/分を含みます。不在時も最大8時間分を精算します。</p></details><div class="filters"><label>保管品を探す<input id="inventorySearch" type="search" placeholder="名称・分類" autocomplete="off"></label></div><div id="inventoryList"></div><nav class="pager" id="inventoryPager" aria-label="保管庫のページ"></nav></section>
+<section id="catalogue" class="view" hidden><div class="mhead"><h2>発見図鑑</h2><span id="catalogueCount" class="meta"></span></div><details class="help"><summary>案内・条件</summary><p>所有状況にかかわらず、登録した対象の記録を閲覧できます。</p></details><div class="filters"><label>照会語<input id="search" type="search" placeholder="名称・分類" autocomplete="off"></label><label>状態<select id="catalogueFilter"><option value="all">すべて</option><option value="seen">発見済み</option><option value="unseen">未発見</option><option value="used">使用試験済み</option></select></label><label>ガチャ台<select id="catalogueMachine"></select></label></div><div id="catalogueList"></div><nav class="pager" id="cataloguePager" aria-label="図鑑のページ"></nav></section>
+<section id="quests" class="view" hidden><h2>調査依頼</h2><details class="help"><summary>案内・条件</summary><p>登録数・初回使用数・稼働回数を報告してください。報告の受理後、次の目標を提示します。</p></details><div class="panelScroll"><div id="questList"></div><h2 class="sectionTitle">組合せ調査</h2><details class="help"><summary>案内・条件</summary><p>指定品を同時に保管すると報告できます。提出しても品は失われません。報告1件につき保管品の観測収入が恒久的に5%増加。各報告の研究手当は4点です。</p></details><div id="reportsList"></div></div></section>
+<section id="skills" class="view" hidden><h2>技能認可</h2><details class="help"><summary>案内・条件</summary><p>初回使用・返却・調査報告で研究点を取得できます。認可された技能は常時有効です。</p></details><div class="panelScroll"><p id="status"></p><div id="skillList"></div><div class="panel" style="margin-top:20px"><h3>整合性の補正</h3><p>研究3点で整合率を最大10ポイント回復。整合率は端末の報告文に影響します。抽選の資格は失われません。</p><button id="repair" data-action="repair">再計算を依頼 · 研究3点</button></div></div></section>
+<section id="log" class="view" hidden><h2>運用記録</h2><div class="panelScroll"><details class="panel"><summary>セーブ管理・書き出し</summary><p>このブラウザに自動保存します。端末を移す場合は記録を書き出してください。</p><button id="export">記録を書き出す</button><label class="fileLabel">保存した記録を読み込む<input type="file" id="import" accept=".json,application/json"></label><p id="importStatus" role="status"></p><p class="meta">直近100件の運用履歴を保存します。保管庫・図鑑・技能・未処理の排出物も記録に含まれます。</p></details><div id="logs"></div></div></section>
 <footer>世界ガチャ // NOTHING IS OUTSIDE THE POOL<br>対象は価値ではなく、存在階層によって分類されます。</footer>
 </main><script>
 const rareClass=r=>'rare-'+(r==='???'?'X':r);
@@ -1121,7 +1138,7 @@ function validate(raw){
 }
 let S=freshState(),storageWarning='',activeView='gacha',activeGroup='生活',selected='m0',catalogueFilter='all',query='';
 const PAGE_SIZE=40;
-let cataloguePage=0,catalogueMachine='all',inventoryPage=0,inventoryQuery='';
+let cataloguePage=0,catalogueMachine='all',inventoryPage=0,inventoryQuery='',lastReceipt='';
 try{
  const saved=localStorage.getItem(KEY);
  if(saved){try{S=validate(JSON.parse(saved));}catch(e){
@@ -1180,7 +1197,7 @@ function pull(id){
   S.mastered[id]=true;addMoney(m.cost*4);S.research+=3;
   log(m.name+'の調査完了。'+m.cost*4+'円、研究3点を支給。');
  }
- commit();$('result')?.scrollIntoView({block:'nearest',behavior:'smooth'});return true;
+ lastReceipt='';commit();$('result').focus?.({preventScroll:true});return true;
 }
 function operate(action,n,fromBag=false){
  settle();const x=byName.get(n);
@@ -1199,7 +1216,8 @@ function operate(action,n,fromBag=false){
   S.used[n]=(S.used[n]||0)+1;
   if(S.integrity<=0)log('整合率0%。端末は業務を継続します。返却による補正を受け付けています。');
  }
- commit();return true;
+ lastReceipt=action==='use'?x.u:action==='keep'?n+'を保管庫へ移動。':action==='sell'?n+'を売却。'+sellPrice(x)+'円を受領。':n+'を返却。研究1点を記録。';
+ commit();if(!fromBag)document.querySelector?.('[data-action="draw"]')?.focus?.({preventScroll:true});return true;
 }
 function survey(){
  settle();if(Date.now()<S.surveyAt)return false;
@@ -1240,7 +1258,7 @@ function money(n){return Math.floor(n).toLocaleString('ja-JP');}
 function button(label,action,id='',disabled=false,cls=''){return '<button class="'+cls+'" data-action="'+action+'" data-id="'+escapeHTML(id)+'" '+(disabled?'disabled':'')+'>'+label+'</button>';}
 function commit(){save();render();}
 function renderHeader(){
- $('money').textContent=money(S.money);$('found').textContent=count()+' / '+items.length;$('lv').textContent=level();$('rate').textContent=incomeRate();$('integrity').textContent=S.integrity.toFixed(3);$('research').textContent=S.research;
+ $('money').textContent=money(S.money);$('found').textContent=count();$('lv').textContent=level();$('rate').textContent=incomeRate();$('integrity').textContent=S.integrity.toFixed(3);$('research').textContent=S.research;
  $('status').textContent=S.integrity>80?'通常運用。対象の存在を順次確認しています。':S.integrity>45?'整合性に軽微な欠損。昨日の報告書は二部存在します。':S.integrity>0?'整合性低下。廊下の長さを信用しないでください。':'整合性なし。業務の継続に支障はありません。';
  $('storageNotice').textContent=storageWarning;$('storageNotice').hidden=!storageWarning;
  const ready=Date.now()>=S.surveyAt;
@@ -1252,16 +1270,19 @@ function renderGacha(){
  $('districts').innerHTML=['生活','現地','記録','基底'].map(g=>button(g+' <small>'+machines.filter(m=>m.group===g&&unlocked(m)).length+'/6</small>','group',g,false,g===activeGroup?'on':'')).join('');
  $('machineGrid').innerHTML=groupMachines.map(m=>{
   const found=m.pool.filter(n=>S.seen[n]).length;
-  return '<button class="machineCard '+(selected===m.id?'selected ':'')+(!unlocked(m)?'locked':'')+'" data-action="select" data-id="'+m.id+'"><span class="mini">'+m.id.toUpperCase().padStart(3,'0')+' / '+(unlocked(m)?'稼働可能':'未解禁')+'</span><strong>'+m.name.replace('ガチャ','')+'</strong><span>'+price(m)+'円 <span class="dim">· '+found+'/'+m.pool.length+'種</span></span><i class="meter"><i style="width:'+found/m.pool.length*100+'%"></i></i></button>';
+  return '<button class="machineCard '+(selected===m.id?'selected ':'')+(!unlocked(m)?'locked':'')+'" data-action="select" data-id="'+m.id+'" aria-pressed="'+(selected===m.id)+'"><span class="mini">'+(unlocked(m)?'稼働可能':'未解禁')+'</span><strong>'+m.name.replace('ガチャ','')+'</strong><span>'+price(m)+'円 <span class="dim">· '+found+'/'+m.pool.length+'</span></span><i class="meter"><i style="width:'+found/m.pool.length*100+'%"></i></i></button>';
  }).join('');
+ $('machineSelect').innerHTML=groupMachines.map(m=>'<option value="'+m.id+'" '+(selected===m.id?'selected':'')+'>'+m.name.replace('ガチャ','')+' · '+price(m)+'円'+(unlocked(m)?'':' / 未解禁')+'</option>').join('');
  const m=byMachine.get(selected),remaining=m.pool.filter(n=>!S.seen[n]).length;
- $('selectedMachine').innerHTML='<div class="mhead"><div><div class="mini">'+m.group+' / '+m.id.toUpperCase()+'</div><h2>'+m.name+'</h2></div><span class="cost">'+price(m)+'<small> 円</small></span></div><p>'+m.desc+'</p><p class="meta">'+(unlocked(m)?remaining?'未登録 '+remaining+'種。重複が7回続いた次の抽選は未登録品。':'全品登録済み。引き続き利用できます。':m.unlock+'種発見 または 累計収入'+money(m.unlock*100)+'円で解禁。')+'</p>'+button(S.current?'排出物の処理を待機中':!unlocked(m)?'利用資格なし':S.money<price(m)?'資金不足 · 周辺調査を利用できます':'抽選する','draw',m.id,!!S.current||!unlocked(m)||S.money<price(m),'primary')+'<details><summary>排出記録・通常確率</summary><p class="meta">'+odds(m).map(x=>'<span class="'+rareClass(x.r)+'">'+x.r+' '+(x.p*100).toFixed(1)+'%</span>').join(' / ')+'</p><p class="meta">同レア内は均等。未登録品の保証・優先照会は通常確率より優先されます。</p><div class="pool">'+m.pool.map(n=>'<span class="'+(S.seen[n]?rareClass(byName.get(n).r):'dim')+'">'+(S.seen[n]?n:'未登録')+'</span>').join('')+'</div><p class="meta">'+(S.mastered[m.id]?'全品登録の報酬は受領済み。追加品も引き続き登録できます。':'この台の全品登録：'+money(m.cost*4)+'円と研究3点（初回のみ）。')+'</p></details>';
+ const eligibility=unlocked(m)?remaining?'未登録 '+remaining+'種。7回連続重複の次は未登録品。':'全品登録済み。引き続き利用できます。':m.unlock+'種発見 または 累計収入'+money(m.unlock*100)+'円で解禁。';
+ $('selectedMachine').hidden=!!S.current;
+ $('selectedMachine').innerHTML='<div class="mhead"><h2>'+m.name+'</h2><span class="cost">'+price(m)+'<small> 円</small></span></div><div class="machineReading">'+(lastReceipt?'<p class="lastReceipt" role="status">'+escapeHTML(lastReceipt)+'</p>':'')+'<p>'+m.desc+'</p><p class="meta">'+eligibility+'</p><details><summary>排出記録・通常確率</summary><p class="meta">'+odds(m).map(x=>'<span class="'+rareClass(x.r)+'">'+x.r+' '+(x.p*100).toFixed(1)+'%</span>').join(' / ')+'</p><p class="meta">同レア内は均等。未登録品の保証・優先照会は通常確率より優先されます。</p><div class="pool">'+m.pool.map(n=>'<span class="'+(S.seen[n]?rareClass(byName.get(n).r):'dim')+'">'+(S.seen[n]?n:'未登録')+'</span>').join('')+'</div><p class="meta">'+(S.mastered[m.id]?'全品登録の報酬は受領済み。追加品も引き続き登録できます。':'この台の全品登録：'+money(m.cost*4)+'円と研究3点（初回のみ）。')+'</p></details></div>'+button(S.current?'排出物の処理を待機中':!unlocked(m)?'利用資格なし':S.money<price(m)?'資金不足 · 周辺調査を利用できます':'抽選する','draw',m.id,!!S.current||!unlocked(m)||S.money<price(m),'primary');
  renderResult();
 }
 function renderResult(){
  const el=$('result');el.hidden=!S.current;if(!S.current){el.innerHTML='';return;}
  const x=byName.get(S.current.n);
- el.innerHTML='<div class="mini '+rareClass(x.r)+'">'+x.r+' // '+x.c+(S.current.fresh?' // 新規登録':' // 既登録')+'</div><h2 class="itemname '+rareClass(x.r)+'">'+x.n+'</h2><div class="meta">'+x.t+' · 保管中 '+(S.bag[x.n]||0)+'個</div><p class="desc">'+escapeHTML(x.d)+'</p><div class="actions">'+button('保管','keep',x.n,false,'primary')+button('使用','use',x.n)+button('返却','return',x.n)+button('売却 '+sellPrice(x)+'円','sell',x.n)+'</div><p class="meta">保管：基礎観測 '+obs[x.r]*8+'円/分。使用：'+(S.used[x.n]?'試験済み':'初回研究 '+(2+ranks.indexOf(x.r)+(S.skills.archive?2:0))+'点')+'、整合率 −'+x.x+'。返却：研究1点、整合率 ＋0.6。</p>';
+ el.innerHTML='<div class="resultHeading"><div class="mini '+rareClass(x.r)+'">'+x.r+' // '+x.c+(S.current.fresh?' // 新規登録':' // 既登録')+'</div><h2 class="itemname '+rareClass(x.r)+'">'+x.n+'</h2><div class="meta">'+x.t+' · 保管中 '+(S.bag[x.n]||0)+'個</div></div><div class="resultReading"><p class="desc">'+escapeHTML(x.d)+'</p><details><summary>操作の効果</summary><p class="meta">保管：基礎観測 '+obs[x.r]*8+'円/分。使用：'+(S.used[x.n]?'試験済み':'初回研究 '+(2+ranks.indexOf(x.r)+(S.skills.archive?2:0))+'点')+'、整合率 −'+x.x+'。返却：研究1点、整合率 ＋0.6。発見記録は手放しても残ります。</p></details></div><div class="actions">'+button('保管','keep',x.n,false,'primary')+button('使用','use',x.n)+button('返却','return',x.n)+button('売却 '+sellPrice(x)+'円','sell',x.n)+'</div>';
 }
 function pageWindow(list,page){
  const pages=Math.max(1,Math.ceil(list.length/PAGE_SIZE));
@@ -1335,6 +1356,7 @@ document.addEventListener('click',e=>{
  if(action==='group'){activeGroup=id;selected=machines.find(m=>m.group===id).id;renderGacha();}
  if(action==='select'){selected=id;renderGacha();}
 });
+$('machineSelect').addEventListener('change',e=>{if(byMachine.has(e.target.value)){selected=e.target.value;renderGacha();}});
 $('search').addEventListener('input',e=>{query=e.target.value.trim();cataloguePage=0;renderCatalogue();});
 $('catalogueFilter').addEventListener('change',e=>{catalogueFilter=e.target.value;cataloguePage=0;renderCatalogue();});
 $('catalogueMachine').innerHTML='<option value="all">すべての台</option>'+machines.map(m=>'<option value="'+m.id+'">'+m.name+'</option>').join('');
