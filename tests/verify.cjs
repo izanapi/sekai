@@ -170,4 +170,36 @@ check('1000-item use milestone closes once without an impossible 1002 target',()
 });
 
 
+
+check('gacha stage switches in place and returns with operation feedback',()=>{
+ r('S=freshState();activeView="gacha";activeGroup="生活";selected="m0";renderGacha();Math.random=()=>0;');
+ assert.equal(app.nodes.get('selectedMachine').hidden,false);
+ assert.equal(app.nodes.get('result').hidden,true);
+ r('pull("m0")');
+ assert.equal(app.nodes.get('selectedMachine').hidden,true);
+ assert.equal(app.nodes.get('result').hidden,false);
+ assert.equal((app.nodes.get('result').innerHTML.match(/data-action="/g)||[]).length,4);
+ r('switchView("catalogue");switchView("gacha");');
+ assert.equal(app.nodes.get('result').hidden,false);
+ r('operate("keep",S.current.n)');
+ assert.equal(app.nodes.get('result').hidden,true);
+ assert.equal(app.nodes.get('selectedMachine').hidden,false);
+ assert.match(app.nodes.get('selectedMachine').innerHTML,/を保管庫へ移動/);
+ assert.equal(r('S.bag["石"]'),1);
+});
+check('compact machine selector uses the same pools and preserves pending items',()=>{
+ r('S=freshState();activeGroup="生活";selected="m0";renderGacha();');
+ app.nodes.get('machineSelect').listeners.change({target:{value:'m1'}});
+ assert.equal(r('selected'),'m1');
+ assert.equal(r('pull(selected)'),true);
+ const item=r('S.current.n');
+ app.nodes.get('machineSelect').listeners.change({target:{value:'m2'}});
+ assert.equal(r('S.current.n'),item);
+ assert.equal(r('pull(selected)'),false);
+ r('operate("use",S.current.n)');
+ assert.equal(app.nodes.get('selectedMachine').hidden,false);
+ assert.ok(r('lastReceipt.length')>0);
+});
+
+
 console.log(passed+' checks passed.');
